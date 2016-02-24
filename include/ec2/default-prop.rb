@@ -34,23 +34,3 @@
     IamInstanceProfile do
       Ref "IAMForEC2"
     end
-    UserData do
-      Fn__Base64 do
-        Fn__Join [
-          "",
-          [
-            "#!/bin/bash\n",
-            "/opt/aws/bin/cfn-init -s ",
-            _{
-              Ref "AWS::StackName"
-            },
-            " -r EC2 ",
-            " --region ",
-            _{
-              Ref "AWS::Region"
-            },
-            "\n"
-          ]
-        ]
-      end
-    end
