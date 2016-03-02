@@ -48,7 +48,10 @@
             _{
               Ref "AWS::Region"
             },
-            "\n"
+            "\n",
+            "until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done", "\n",
+            "/opt/aws/bin/cfn-signal -e $? -r \"WordPress setup complete\" '",
+            _{ Ref "EC2WaitHandle" }, "'\n"
           ]
         ]
       end
