@@ -1,3 +1,29 @@
+SecurityGroupPublic do
+  Type "AWS::EC2::SecurityGroup"
+  Properties do
+    GroupDescription "SG for ELB"
+    SecurityGroupIngress [
+      _{
+        IpProtocol "tcp"
+        FromPort   80
+        ToPort     80
+        CidrIp     "0.0.0.0/0"
+      }
+    ]
+    Tags [
+      _{
+        Key "Application"
+        Value do
+          Ref "AWS::StackName"
+        end
+      }
+    ]
+    VpcId do
+      Ref "VPC"
+    end
+  end
+end
+
 SecurityGroupInstance do
   Type "AWS::EC2::SecurityGroup"
   Properties do
