@@ -43,3 +43,19 @@ SecurityGroupInternal do
     end
   end
 end
+
+SecurityGroupInternalSelfIngress do
+  Type "AWS::EC2::SecurityGroupIngress"
+  DependsOn "SecurityGroupInternal"
+  Properties do
+    GroupId do
+      Ref "SecurityGroupInternal"
+    end
+    SourceSecurityGroupId do
+      Ref "SecurityGroupInternal"
+    end
+    VIpProtocol "tcp"
+    ToPort     65535
+    FromPort   0
+  end
+end
