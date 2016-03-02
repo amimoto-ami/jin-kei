@@ -4,6 +4,7 @@ _include 'include/rds/rds_security_group.rb'
 
 RDS do
   Type "AWS::RDS::DBInstance"
+  DeletionPolicy "Snapshot"
   Properties do
     AllocatedStorage do
       Ref "DBAllocatedStorage"
