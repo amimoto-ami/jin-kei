@@ -3,6 +3,7 @@ MySQLPassword do
   Type        "String"
   MinLength   8
   MaxLength   64
+  NoEcho      true
 end
 
 MulitiAZDatabase do
