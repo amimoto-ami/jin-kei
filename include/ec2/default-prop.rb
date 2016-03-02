@@ -1,9 +1,5 @@
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "PRI"
-      ]
+      Ref "AvailabilityZonePrimary"
     end
     DisableApiTermination "false"
     EbsOptimized "false"
