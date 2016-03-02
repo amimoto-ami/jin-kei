@@ -54,7 +54,7 @@ SecurityGroupInternalSelfIngress do
     SourceSecurityGroupId do
       Ref "SecurityGroupInternal"
     end
-    VIpProtocol "tcp"
+    IpProtocol "tcp"
     ToPort     65535
     FromPort   0
   end
