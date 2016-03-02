@@ -3,11 +3,7 @@ RDSSubnet1 do
   Properties do
     CidrBlock "10.0.1.0/24"
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "PRI"
-      ]
+      _{ Ref "AvailabilityZonePrimary"}
     end
     MapPublicIpOnLaunch "false"
     VpcId do
@@ -29,11 +25,7 @@ RDSSubnet2 do
   Properties do
     CidrBlock "10.0.2.0/24"
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "SEC"
-      ]
+      _{ Ref "AvailabilityZoneSecondary"}
     end
     MapPublicIpOnLaunch "false"
     VpcId do
