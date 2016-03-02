@@ -3,7 +3,7 @@ RDSSubnet1 do
   Properties do
     CidrBlock "10.0.1.0/24"
     AvailabilityZone do
-      Ref "AvailabilityZonePrimary"
+      Ref "AvailabilityZone"
     end
     MapPublicIpOnLaunch "false"
     VpcId do
@@ -25,7 +25,7 @@ RDSSubnet2 do
   Properties do
     CidrBlock "10.0.2.0/24"
     AvailabilityZone do
-      Ref "AvailabilityZoneSecondary"
+      Ref "SecondaryAvailabilityZone"
     end
     MapPublicIpOnLaunch "false"
     VpcId do

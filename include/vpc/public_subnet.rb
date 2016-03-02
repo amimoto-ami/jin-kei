@@ -4,7 +4,7 @@ PublicSubnet do
   Properties do
     CidrBlock "10.0.0.0/24"
     AvailabilityZone do
-      Ref "AvailabilityZonePrimary"
+      Ref "AvailabilityZone"
     end
     MapPublicIpOnLaunch "true"
     VpcId do

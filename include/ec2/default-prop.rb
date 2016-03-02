@@ -1,5 +1,5 @@
     AvailabilityZone do
-      Ref "AvailabilityZonePrimary"
+      Ref "AvailabilityZone"
     end
     DisableApiTermination "false"
     EbsOptimized "false"

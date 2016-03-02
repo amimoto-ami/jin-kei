@@ -12,11 +12,7 @@ RDS do
     AllowMajorVersionUpgrade true
     AutoMinorVersionUpgrade true
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "PRI"
-      ]
+      Ref "AvailabilityZone"
     end
     BackupRetentionPeriod 1
     DBInstanceClass do
