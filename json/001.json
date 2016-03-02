@@ -33,48 +33,6 @@
       "us-west-2": {
         "AMI": "ami-2835d648"
       }
-    },
-    "AZs": {
-      "us-east-1": {
-        "PRI": "us-east-1d",
-        "SEC": "us-east-1c"
-      },
-      "us-west-2": {
-        "PRI": "us-west-2b",
-        "SEC": "us-west-2c"
-      },
-      "us-west-1": {
-        "PRI": "us-west-1a",
-        "SEC": "us-west-1b"
-      },
-      "eu-central-1": {
-        "PRI": "eu-central-1a",
-        "SEC": "eu-central-1b"
-      },
-      "eu-west-1": {
-        "PRI": "eu-west-1c",
-        "SEC": "eu-west-1b"
-      },
-      "ap-southeast-1": {
-        "PRI": "ap-southeast-1b",
-        "SEC": "ap-southeast-1a"
-      },
-      "ap-southeast-2": {
-        "PRI": "ap-southeast-2b",
-        "SEC": "ap-southeast-2a"
-      },
-      "ap-northeast-1": {
-        "PRI": "ap-northeast-1c",
-        "SEC": "ap-northeast-1a"
-      },
-      "ap-northeast-2": {
-        "PRI": "ap-northeast-2c",
-        "SEC": "ap-northeast-2a"
-      },
-      "sa-east-1": {
-        "PRI": "sa-east-1b",
-        "SEC": "sa-east-1a"
-      }
     }
   },
   "Parameters": {
@@ -90,6 +48,14 @@
       "MaxLength": "18",
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "AvailabilityZone": {
+      "Description": "Pick an AvailabilityZone for Primary Subnet. Public subnet will creates in here.",
+      "Type": "AWS::EC2::AvailabilityZone::Name"
+    },
+    "SecondaryAvailabilityZone": {
+      "Description": "Pick an AvailabilityZone for Secondary Subnet.This zone is used by RDS.",
+      "Type": "AWS::EC2::AvailabilityZone::Name"
     },
     "InstanceType": {
       "Description": "EC2 instance type",
@@ -137,7 +103,8 @@
       "Description": "Password of RDS User",
       "Type": "String",
       "MinLength": "8",
-      "MaxLength": "64"
+      "MaxLength": "64",
+      "NoEcho": "true"
     },
     "MulitiAZDatabase": {
       "Description": "Crate a Multi-AZ RDS Database Instance",
@@ -151,7 +118,7 @@
     },
     "RDSInstanceType": {
       "Description": "RDS Instance Type",
-      "Default": "db.m3.medium",
+      "Default": "db.t2.medium",
       "Type": "String",
       "AllowedValues": [
         "db.t2.micro",
@@ -192,13 +159,7 @@
       "Properties": {
         "CidrBlock": "10.0.0.0/24",
         "AvailabilityZone": {
-          "Fn::FindInMap": [
-            "AZs",
-            {
-              "Ref": "AWS::Region"
-            },
-            "PRI"
-          ]
+          "Ref": "AvailabilityZone"
         },
         "MapPublicIpOnLaunch": "true",
         "VpcId": {
@@ -312,6 +273,19 @@
         ]
       }
     },
+    "EC2WaitHandle": {
+      "Type": "AWS::CloudFormation::WaitConditionHandle"
+    },
+    "EC2WaitCondition": {
+      "Type": "AWS::CloudFormation::WaitCondition",
+      "DependsOn": "EC2",
+      "Properties": {
+        "Handle": {
+          "Ref": "EC2WaitHandle"
+        },
+        "Timeout": "1800"
+      }
+    },
     "EC2": {
       "Type": "AWS::EC2::Instance",
       "Metadata": {
@@ -348,13 +322,7 @@
       },
       "Properties": {
         "AvailabilityZone": {
-          "Fn::FindInMap": [
-            "AZs",
-            {
-              "Ref": "AWS::Region"
-            },
-            "PRI"
-          ]
+          "Ref": "AvailabilityZone"
         },
         "DisableApiTermination": "false",
         "EbsOptimized": "false",
@@ -381,7 +349,10 @@
         "Tenancy": "default",
         "SecurityGroupIds": [
           {
-            "Ref": "SecurityGroup"
+            "Ref": "SecurityGroupInstance"
+          },
+          {
+            "Ref": "SecurityGroupInternal"
           }
         ],
         "IamInstanceProfile": {
@@ -402,7 +373,14 @@
                 {
                   "Ref": "AWS::Region"
                 },
-                "\n"
+                "\n",
+                "until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done",
+                "\n",
+                "/opt/aws/bin/cfn-signal -e $? -r \"WordPress setup complete\" '",
+                {
+                  "Ref": "EC2WaitHandle"
+                },
+                "'\n"
               ]
             ]
           }
@@ -426,13 +404,7 @@
       "Properties": {
         "CidrBlock": "10.0.1.0/24",
         "AvailabilityZone": {
-          "Fn::FindInMap": [
-            "AZs",
-            {
-              "Ref": "AWS::Region"
-            },
-            "PRI"
-          ]
+          "Ref": "AvailabilityZone"
         },
         "MapPublicIpOnLaunch": "false",
         "VpcId": {
@@ -453,13 +425,7 @@
       "Properties": {
         "CidrBlock": "10.0.2.0/24",
         "AvailabilityZone": {
-          "Fn::FindInMap": [
-            "AZs",
-            {
-              "Ref": "AWS::Region"
-            },
-            "SEC"
-          ]
+          "Ref": "SecondaryAvailabilityZone"
         },
         "MapPublicIpOnLaunch": "false",
         "VpcId": {
@@ -499,7 +465,7 @@
             "FromPort": "3306",
             "ToPort": "3306",
             "SourceSecurityGroupId": {
-              "Ref": "SecurityGroup"
+              "Ref": "SecurityGroupInstance"
             }
           },
           {
@@ -507,7 +473,7 @@
             "FromPort": "3306",
             "ToPort": "3306",
             "SourceSecurityGroupId": {
-              "Ref": "SecurityGroup"
+              "Ref": "SecurityGroupInstance"
             }
           }
         ],
@@ -526,6 +492,7 @@
     },
     "RDS": {
       "Type": "AWS::RDS::DBInstance",
+      "DeletionPolicy": "Snapshot",
       "Properties": {
         "AllocatedStorage": {
           "Ref": "DBAllocatedStorage"
@@ -533,13 +500,7 @@
         "AllowMajorVersionUpgrade": "true",
         "AutoMinorVersionUpgrade": "true",
         "AvailabilityZone": {
-          "Fn::FindInMap": [
-            "AZs",
-            {
-              "Ref": "AWS::Region"
-            },
-            "PRI"
-          ]
+          "Ref": "AvailabilityZone"
         },
         "BackupRetentionPeriod": "1",
         "DBInstanceClass": {
@@ -575,19 +536,11 @@
         ]
       }
     },
-    "SecurityGroup": {
+    "SecurityGroupPublic": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "This is Simple SecurityGroup made by CloudFormation",
+        "GroupDescription": "SG for ELB",
         "SecurityGroupIngress": [
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "22",
-            "ToPort": "22",
-            "CidrIp": {
-              "Ref": "SSHLocation"
-            }
-          },
           {
             "IpProtocol": "tcp",
             "FromPort": "80",
@@ -606,6 +559,65 @@
         "VpcId": {
           "Ref": "VPC"
         }
+      }
+    },
+    "SecurityGroupInstance": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "SG for EC2 Instance",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": {
+              "Ref": "SSHLocation"
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "SecurityGroupInternal": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Allow connect between EC2 Instance and ELB",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "SecurityGroupInternalSelfIngress": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "DependsOn": "SecurityGroupInternal",
+      "Properties": {
+        "GroupId": {
+          "Ref": "SecurityGroupInternal"
+        },
+        "SourceSecurityGroupId": {
+          "Ref": "SecurityGroupInternal"
+        },
+        "IpProtocol": "tcp",
+        "ToPort": "65535",
+        "FromPort": "0"
       }
     },
     "ELB": {
@@ -638,7 +650,10 @@
         ],
         "SecurityGroups": [
           {
-            "Ref": "SecurityGroup"
+            "Ref": "SecurityGroupInternal"
+          },
+          {
+            "Ref": "SecurityGroupPublic"
           }
         ]
       }
