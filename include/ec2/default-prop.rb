@@ -28,7 +28,10 @@
     Tenancy "default"
     SecurityGroupIds [
       _{
-        Ref "SecurityGroup"
+        Ref "SecurityGroupInstance"
+      },
+      _{
+        Ref "SecurityGroupInternal"
       }
     ]
     IamInstanceProfile do

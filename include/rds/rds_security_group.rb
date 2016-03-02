@@ -8,7 +8,7 @@ RDSSecurityGroup do
         FromPort   3306
         ToPort     3306
         SourceSecurityGroupId do
-          Ref "SecurityGroup"
+          Ref "SecurityGroupInstance"
         end
       },
       _{
@@ -16,7 +16,7 @@ RDSSecurityGroup do
         FromPort   3306
         ToPort     3306
         SourceSecurityGroupId do
-          Ref "SecurityGroup"
+          Ref "SecurityGroupInstance"
         end
       }
     ]

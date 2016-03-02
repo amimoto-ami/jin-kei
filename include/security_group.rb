@@ -1,7 +1,7 @@
-SecurityGroup do
+SecurityGroupInstance do
   Type "AWS::EC2::SecurityGroup"
   Properties do
-    GroupDescription "This is Simple SecurityGroup made by CloudFormation"
+    GroupDescription "SG for EC2 Instance"
     SecurityGroupIngress [
       _{
         IpProtocol "tcp"
@@ -10,14 +10,26 @@ SecurityGroup do
         CidrIp do
           Ref "SSHLocation"
         end
-      },
-      _{
-        IpProtocol "tcp"
-        FromPort   80
-        ToPort     80
-        CidrIp     "0.0.0.0/0"
       }
     ]
+    Tags [
+      _{
+        Key "Application"
+        Value do
+          Ref "AWS::StackName"
+        end
+      }
+    ]
+    VpcId do
+      Ref "VPC"
+    end
+  end
+end
+
+SecurityGroupInternal do
+  Type "AWS::EC2::SecurityGroup"
+  Properties do
+    GroupDescription "Allow connect between EC2 Instance and ELB"
     Tags [
       _{
         Key "Application"
