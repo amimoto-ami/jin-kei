@@ -4,11 +4,7 @@ PublicSubnet do
   Properties do
     CidrBlock "10.0.0.0/24"
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "PRI"
-      ]
+      Ref "AvailabilityZone"
     end
     MapPublicIpOnLaunch "true"
     VpcId do

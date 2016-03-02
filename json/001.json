@@ -415,7 +415,7 @@
             }
           },
           {
-            "Key": "HasRDS?",
+            "Key": "HasRDS",
             "Value": "true"
           }
         ]
