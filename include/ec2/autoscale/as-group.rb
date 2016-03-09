@@ -4,11 +4,7 @@ AutoScalingGroup do
   Properties do
     AvailabilityZones [
       _{
-        Fn__FindInMap [
-          "AZs",
-          _{ Ref "AWS::Region"},
-          "PRI"
-        ]
+        Ref "AvailabilityZone"
       }
     ]
     Tags [
