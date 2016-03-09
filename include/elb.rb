@@ -28,7 +28,10 @@ ELB do
     ]
     SecurityGroups [
       _{
-        Ref "SecurityGroup"
+        Ref "SecurityGroupInternal"
+      },
+      _{
+        Ref "SecurityGroupPublic"
       }
     ]
   end

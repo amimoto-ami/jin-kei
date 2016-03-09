@@ -49,7 +49,7 @@ EC2 do
         end
       },
       _{
-        Key "HasRDS?"
+        Key "HasRDS"
         Value "true"
 	  }
     ]

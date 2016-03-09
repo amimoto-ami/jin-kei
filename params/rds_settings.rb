@@ -3,6 +3,7 @@ MySQLPassword do
   Type        "String"
   MinLength   8
   MaxLength   64
+  NoEcho      true
 end
 
 MulitiAZDatabase do
@@ -15,7 +16,7 @@ end
 
 RDSInstanceType do
   Description           "RDS Instance Type"
-  Default               "db.m3.medium"
+  Default               "db.t2.medium"
   Type                  "String"
   AllowedValues         "db.t2.micro",
 				"db.t2.small",

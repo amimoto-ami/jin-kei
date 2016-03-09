@@ -4,6 +4,7 @@ _include 'include/rds/rds_security_group.rb'
 
 RDS do
   Type "AWS::RDS::DBInstance"
+  DeletionPolicy "Snapshot"
   Properties do
     AllocatedStorage do
       Ref "DBAllocatedStorage"
@@ -11,11 +12,7 @@ RDS do
     AllowMajorVersionUpgrade true
     AutoMinorVersionUpgrade true
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "PRI"
-      ]
+      Ref "AvailabilityZone"
     end
     BackupRetentionPeriod 1
     DBInstanceClass do
