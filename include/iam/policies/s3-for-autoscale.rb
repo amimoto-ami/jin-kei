@@ -31,15 +31,31 @@ IAMPolicyForS3AS do
             "s3:DeleteObject"
           ]
           Resource do
-            Fn__Join [
-              "",
-              [
-                "arn:aws:s3:::",
-                _{
-                  Ref "S3Media"
-                },
-                "/*"
-              ]
+            [
+              _{
+                Fn__Join [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    _{
+                      Ref "S3Media"
+                    },
+                    "/*"
+                  ]
+                ]
+              },
+              _{
+                Fn__Join [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    _{
+                      Ref "S3ForAS"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
             ]
           end
         },
@@ -51,14 +67,31 @@ IAMPolicyForS3AS do
             "s3:GetBucketLocation"
           ]
           Resource do
-            Fn__Join [
-              "",
-              [
-                "arn:aws:s3:::",
-                _{
-                  Ref "S3Media"
-                }
-              ]
+            [
+              _{
+                Fn__Join [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    _{
+                      Ref "S3Media"
+                    },
+                    "/*"
+                  ]
+                ]
+              },
+              _{
+                Fn__Join [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    _{
+                      Ref "S3ForAS"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
             ]
           end
         }
