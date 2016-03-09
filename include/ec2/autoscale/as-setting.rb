@@ -19,7 +19,10 @@ AutoScaleSetting do
     }
     SecurityGroups [
       _{
-        Ref "SecurityGroup"
+        Ref "SecurityGroupInstance"
+      },
+      _{
+        Ref "SecurityGroupInternal"
       }
     ]
     UserData do

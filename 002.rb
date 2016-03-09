@@ -7,18 +7,19 @@ EOS
 
 Mappings do
   _include "include/mapping/ami_hvm.rb"
-  _include "include/mapping/az.rb"
 end
 
 Parameters do
   _include "params/keyname.rb"
+  _include "params/ssh_location.rb"
+  _include "params/subnets.rb"
   _include "params/ec2_instance.rb"
   _include "params/rds_settings.rb"
-  _include "params/ssh_location.rb"
 end
 
 Resources do
   _include 'include/vpc/vpc.rb'
+  _include 'include/ec2/waithandle_ec2.rb'
   _include "include/ec2/ec2-as.rb"
   _include "include/rds/rds.rb"
   _include "include/security_group.rb"
