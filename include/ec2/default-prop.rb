@@ -1,9 +1,5 @@
     AvailabilityZone do
-      Fn__FindInMap [
-        "AZs",
-        _{ Ref "AWS::Region"},
-        "PRI"
-      ]
+      Ref "AvailabilityZone"
     end
     DisableApiTermination "false"
     EbsOptimized "false"
@@ -28,7 +24,10 @@
     Tenancy "default"
     SecurityGroupIds [
       _{
-        Ref "SecurityGroup"
+        Ref "SecurityGroupInstance"
+      },
+      _{
+        Ref "SecurityGroupInternal"
       }
     ]
     IamInstanceProfile do
