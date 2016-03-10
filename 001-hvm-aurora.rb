@@ -9,4 +9,13 @@ Mappings do
   _include "include/mapping/ami_hvm.rb"
 end
 
+Conditions do
+  CreateSecDB do
+    Fn__Equals [
+      _{ Ref "MulitiAZDatabase" },
+      true
+    ]
+  end
+end
+
 _include "001-base-aurora.rb"

@@ -1,19 +1,28 @@
 RDSCluster do
   Type "AWS::RDS::DBCluster"
   Properties do
-    BackupRetentionPeriod 1
+    Engine "aurora"
     DatabaseName          "wordpress"
+    PreferredBackupWindow "00:00-00:30"
+    PreferredMaintenanceWindow "sun:16:00-sun:17:30"
+    AvailabilityZones [
+      _{ Ref "AvailabilityZone" },
+      _{ Ref "SecondaryAvailabilityZone" }
+    ]
+    BackupRetentionPeriod 1
     DBSubnetGroupName do
       Ref "DBSubnetGroup"
     end
-    Engine "aurora"
     MasterUsername "amimoto"
     MasterUserPassword do
       Ref "MySQLPassword"
     end
     Port 3306
-    PreferredBackupWindow "00:00-00:30"
-    PreferredMaintenanceWindow "sun:16:00-sun:17:30"
+    VpcSecurityGroupIds [
+      _{
+        Ref "RDSSecurityGroup"
+      }
+    ]
     Tags [
       _{
         Key "Application"
@@ -22,11 +31,5 @@ RDSCluster do
         end
       }
     ]
-    VpcSecurityGroupIds [
-      _{
-        Ref "RDSSecurityGroup"
-      }
-    ]
-
   end
 end
