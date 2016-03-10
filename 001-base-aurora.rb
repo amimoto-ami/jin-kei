@@ -3,7 +3,7 @@ Parameters do
   _include "params/ssh_location.rb"
   _include "params/subnets.rb"
   _include "params/ec2_instance.rb"
-  _include "params/rds_settings.rb"
+  _include "params/aurora_settings.rb"
 end
 
 Resources do
