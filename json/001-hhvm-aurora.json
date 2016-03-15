@@ -1,38 +1,48 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(Amazon Aurora).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
-        "AMI": "ami-30289a43"
+        "AMI": "ami-842496f7"
       },
       "ap-southeast-1": {
-        "AMI": "ami-7da9601e"
+        "AMI": "ami-1ea8617d"
       },
       "ap-southeast-2": {
-        "AMI": "ami-5295b231"
+        "AMI": "ami-b993b4da"
       },
       "eu-central-1": {
-        "AMI": "ami-5a647e36"
+        "AMI": "ami-bc1a00d0"
       },
       "ap-northeast-2": {
-        "AMI": "ami-492de327"
+        "AMI": "ami-0827e966"
       },
       "ap-northeast-1": {
-        "AMI": "ami-1e2e2f70"
+        "AMI": "ami-bc3031d2"
       },
       "us-east-1": {
-        "AMI": "ami-58417032"
+        "AMI": "ami-a34071c9"
       },
       "sa-east-1": {
-        "AMI": "ami-9e7dfef2"
+        "AMI": "ami-48058624"
       },
       "us-west-1": {
-        "AMI": "ami-7aafde1a"
+        "AMI": "ami-13addc73"
       },
       "us-west-2": {
-        "AMI": "ami-5d35d63d"
+        "AMI": "ami-9032d1f0"
       }
+    }
+  },
+  "Conditions": {
+    "CreateSecDB": {
+      "Fn::Equals": [
+        {
+          "Ref": "MulitiAZDatabase"
+        },
+        true
+      ]
     }
   },
   "Parameters": {
@@ -62,9 +72,6 @@
       "Type": "String",
       "Default": "c3.large",
       "AllowedValues": [
-        "t2.micro",
-        "t2.small",
-        "t2.medium",
         "m3.medium",
         "m3.large",
         "m3.xlarge",
@@ -108,7 +115,7 @@
     },
     "MulitiAZDatabase": {
       "Description": "Crate a Multi-AZ RDS Database Instance",
-      "Default": "false",
+      "Default": "true",
       "Type": "String",
       "AllowedValues": [
         "true",
@@ -117,24 +124,10 @@
       "ConstraintDescription": "must be either true or false"
     },
     "RDSInstanceType": {
-      "Description": "RDS Instance Type",
-      "Default": "db.t2.medium",
+      "Description": "Aurora RDS Instance Type",
+      "Default": "db.r3.large",
       "Type": "String",
       "AllowedValues": [
-        "db.t2.micro",
-        "db.t2.small",
-        "db.t2.medium",
-        "db.m1.small",
-        "db.m1.medium",
-        "db.m1.large",
-        "db.m1.xlarge",
-        "db.m3.medium",
-        "db.m3.large",
-        "db.m3.xlarge",
-        "db.m3.2xlarge",
-        "db.m2.xlarge",
-        "db.m2.2xlarge",
-        "db.m2.4xlarge",
         "db.r3.large",
         "db.r3.xlarge",
         "db.r3.2xlarge",
@@ -170,7 +163,7 @@
                 "context": {
                   "endpoint": {
                     "Fn::GetAtt": [
-                      "RDS",
+                      "RDSCluster",
                       "Endpoint.Address"
                     ]
                   },
@@ -357,37 +350,35 @@
         }
       }
     },
-    "RDS": {
-      "Type": "AWS::RDS::DBInstance",
-      "DeletionPolicy": "Snapshot",
+    "RDSCluster": {
+      "Type": "AWS::RDS::DBCluster",
       "Properties": {
-        "AllocatedStorage": {
-          "Ref": "DBAllocatedStorage"
-        },
-        "AllowMajorVersionUpgrade": "true",
-        "AutoMinorVersionUpgrade": "true",
-        "AvailabilityZone": {
-          "Ref": "AvailabilityZone"
-        },
+        "Engine": "aurora",
+        "DatabaseName": "wordpress",
+        "PreferredBackupWindow": "00:00-00:30",
+        "PreferredMaintenanceWindow": "sun:16:00-sun:17:30",
+        "AvailabilityZones": [
+          {
+            "Ref": "AvailabilityZone"
+          },
+          {
+            "Ref": "SecondaryAvailabilityZone"
+          }
+        ],
         "BackupRetentionPeriod": "1",
-        "DBInstanceClass": {
-          "Ref": "RDSInstanceType"
-        },
-        "DBName": "wordpress",
         "DBSubnetGroupName": {
           "Ref": "DBSubnetGroup"
         },
-        "Engine": "MariaDB",
         "MasterUsername": "amimoto",
         "MasterUserPassword": {
           "Ref": "MySQLPassword"
         },
-        "MultiAZ": {
-          "Ref": "MulitiAZDatabase"
-        },
         "Port": "3306",
-        "PreferredBackupWindow": "00:00-00:30",
-        "PreferredMaintenanceWindow": "sun:16:00-sun:17:30",
+        "VpcSecurityGroupIds": [
+          {
+            "Ref": "RDSSecurityGroup"
+          }
+        ],
         "Tags": [
           {
             "Key": "Application",
@@ -395,10 +386,62 @@
               "Ref": "AWS::StackName"
             }
           }
-        ],
-        "VPCSecurityGroups": [
+        ]
+      }
+    },
+    "RDSA": {
+      "Type": "AWS::RDS::DBInstance",
+      "Properties": {
+        "Engine": "aurora",
+        "DBClusterIdentifier": {
+          "Ref": "RDSCluster"
+        },
+        "AllowMajorVersionUpgrade": "true",
+        "AutoMinorVersionUpgrade": "true",
+        "AvailabilityZone": {
+          "Ref": "AvailabilityZone"
+        },
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroup"
+        },
+        "DBInstanceClass": {
+          "Ref": "RDSInstanceType"
+        },
+        "Tags": [
           {
-            "Ref": "RDSSecurityGroup"
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "RDSB": {
+      "Type": "AWS::RDS::DBInstance",
+      "Condition": "CreateSecDB",
+      "Properties": {
+        "Engine": "aurora",
+        "DBClusterIdentifier": {
+          "Ref": "RDSCluster"
+        },
+        "AllowMajorVersionUpgrade": "true",
+        "AutoMinorVersionUpgrade": "true",
+        "AvailabilityZone": {
+          "Ref": "SecondaryAvailabilityZone"
+        },
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroup"
+        },
+        "DBInstanceClass": {
+          "Ref": "RDSInstanceType"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
           }
         ]
       }

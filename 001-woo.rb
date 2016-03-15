@@ -9,4 +9,10 @@ Mappings do
   _include "include/mapping/ami_woo.rb"
 end
 
-_include "001-base.rb"
+Parameters do
+  _include "001-base-param.rb"
+  _include "params/ec2_instance_hhvm.rb"
+  _include "params/rds_settings.rb"
+end
+_include "001-rds-resource.rb"
+_include "001-base-output.rb"
