@@ -150,139 +150,6 @@
     }
   },
   "Resources": {
-    "PublicSubnet": {
-      "Type": "AWS::EC2::Subnet",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "CidrBlock": "10.0.0.0/24",
-        "AvailabilityZone": {
-          "Ref": "AvailabilityZone"
-        },
-        "MapPublicIpOnLaunch": "true",
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          }
-        ]
-      }
-    },
-    "RouteTable": {
-      "Type": "AWS::EC2::RouteTable",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "VpcId": {
-          "Ref": "VPC"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          }
-        ]
-      }
-    },
-    "AssociationRtToPubSub": {
-      "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "RouteTableId": {
-          "Ref": "RouteTable"
-        },
-        "SubnetId": {
-          "Ref": "PublicSubnet"
-        }
-      }
-    },
-    "InternetGateway": {
-      "DependsOn": "VPC",
-      "DeletionPolicy": "Retain",
-      "Type": "AWS::EC2::InternetGateway",
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          }
-        ]
-      }
-    },
-    "AttachGatewayToVPC": {
-      "DependsOn": [
-        "VPC",
-        "InternetGateway"
-      ],
-      "Type": "AWS::EC2::VPCGatewayAttachment",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "InternetGatewayId": {
-          "Ref": "InternetGateway"
-        },
-        "VpcId": {
-          "Ref": "VPC"
-        }
-      }
-    },
-    "Route": {
-      "Type": "AWS::EC2::Route",
-      "DependsOn": "AttachGatewayToVPC",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId": {
-          "Ref": "InternetGateway"
-        },
-        "RouteTableId": {
-          "Ref": "RouteTable"
-        }
-      }
-    },
-    "VPC": {
-      "Type": "AWS::EC2::VPC",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "CidrBlock": "10.0.0.0/16",
-        "InstanceTenancy": "default",
-        "EnableDnsSupport": "true",
-        "EnableDnsHostnames": "true",
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          },
-          {
-            "Key": "Application",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          }
-        ]
-      }
-    },
-    "EC2WaitHandle": {
-      "Type": "AWS::CloudFormation::WaitConditionHandle"
-    },
-    "EC2WaitCondition": {
-      "Type": "AWS::CloudFormation::WaitCondition",
-      "DependsOn": "EC2",
-      "Properties": {
-        "Handle": {
-          "Ref": "EC2WaitHandle"
-        },
-        "Timeout": "1800"
-      }
-    },
     "EC2": {
       "Type": "AWS::EC2::Instance",
       "Metadata": {
@@ -531,6 +398,139 @@
             "Ref": "RDSSecurityGroup"
           }
         ]
+      }
+    },
+    "PublicSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "AvailabilityZone": {
+          "Ref": "AvailabilityZone"
+        },
+        "MapPublicIpOnLaunch": "true",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "RouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "AssociationRtToPubSub": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet"
+        }
+      }
+    },
+    "InternetGateway": {
+      "DependsOn": "VPC",
+      "DeletionPolicy": "Retain",
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "AttachGatewayToVPC": {
+      "DependsOn": [
+        "VPC",
+        "InternetGateway"
+      ],
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+    "Route": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "AttachGatewayToVPC",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "InstanceTenancy": "default",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          },
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackName"
+            }
+          }
+        ]
+      }
+    },
+    "EC2WaitHandle": {
+      "Type": "AWS::CloudFormation::WaitConditionHandle"
+    },
+    "EC2WaitCondition": {
+      "Type": "AWS::CloudFormation::WaitCondition",
+      "DependsOn": "EC2",
+      "Properties": {
+        "Handle": {
+          "Ref": "EC2WaitHandle"
+        },
+        "Timeout": "1800"
       }
     },
     "SecurityGroupPublic": {
