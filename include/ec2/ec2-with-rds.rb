@@ -1,5 +1,6 @@
 EC2 do
   Type "AWS::EC2::Instance"
+  DependsOn "AttachGatewayToVPC"
   Metadata do
     AWS__CloudFormation__Init do
       config do

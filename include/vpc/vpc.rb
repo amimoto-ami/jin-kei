@@ -5,7 +5,6 @@ _include 'include/vpc/internet_gateway.rb'
 _include 'include/vpc/route.rb'
 VPC do
   Type "AWS::EC2::VPC"
-  DeletionPolicy "Retain"
   Properties do
     CidrBlock "10.0.0.0/16"
     InstanceTenancy "default"
