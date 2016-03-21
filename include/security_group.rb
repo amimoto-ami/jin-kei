@@ -70,7 +70,7 @@ SecurityGroupInternal do
   end
 end
 
-SecurityGroupInternalSelfIngress do
+SecurityGroupInternalSelfIngress80 do
   Type "AWS::EC2::SecurityGroupIngress"
   DependsOn "SecurityGroupInternal"
   Properties do
@@ -81,7 +81,23 @@ SecurityGroupInternalSelfIngress do
       Ref "SecurityGroupInternal"
     end
     IpProtocol "tcp"
-    ToPort     65535
-    FromPort   0
+    ToPort     80
+    FromPort   80
+  end
+end
+
+SecurityGroupInternalSelfIngress443 do
+  Type "AWS::EC2::SecurityGroupIngress"
+  DependsOn "SecurityGroupInternal"
+  Properties do
+    GroupId do
+      Ref "SecurityGroupInternal"
+    end
+    SourceSecurityGroupId do
+      Ref "SecurityGroupInternal"
+    end
+    IpProtocol "tcp"
+    ToPort     443
+    FromPort   443
   end
 end
