@@ -605,7 +605,7 @@
         }
       }
     },
-    "SecurityGroupInternalSelfIngress": {
+    "SecurityGroupInternalSelfIngress80": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "DependsOn": "SecurityGroupInternal",
       "Properties": {
@@ -616,8 +616,23 @@
           "Ref": "SecurityGroupInternal"
         },
         "IpProtocol": "tcp",
-        "ToPort": "65535",
-        "FromPort": "0"
+        "ToPort": "80",
+        "FromPort": "80"
+      }
+    },
+    "SecurityGroupInternalSelfIngress443": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "DependsOn": "SecurityGroupInternal",
+      "Properties": {
+        "GroupId": {
+          "Ref": "SecurityGroupInternal"
+        },
+        "SourceSecurityGroupId": {
+          "Ref": "SecurityGroupInternal"
+        },
+        "IpProtocol": "tcp",
+        "ToPort": "443",
+        "FromPort": "443"
       }
     },
     "ELB": {
