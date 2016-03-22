@@ -1,5 +1,6 @@
 DBSubnetGroup do
   Type "AWS::RDS::DBSubnetGroup"
+  DependsOn "AttachGatewayToVPC"
   Properties do
     DBSubnetGroupDescription "Subnets available for the RDS DB Instance"
     SubnetIds [

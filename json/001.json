@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "WordPress powered by JINKEI (Simple Stack HVM) Version1.0.1\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
@@ -155,6 +155,7 @@
   "Resources": {
     "EC2": {
       "Type": "AWS::EC2::Instance",
+      "DependsOn": "AttachGatewayToVPC",
       "Metadata": {
         "AWS::CloudFormation::Init": {
           "config": {
@@ -310,6 +311,7 @@
     },
     "DBSubnetGroup": {
       "Type": "AWS::RDS::DBSubnetGroup",
+      "DependsOn": "AttachGatewayToVPC",
       "Properties": {
         "DBSubnetGroupDescription": "Subnets available for the RDS DB Instance",
         "SubnetIds": [
@@ -405,7 +407,6 @@
     },
     "PublicSubnet": {
       "Type": "AWS::EC2::Subnet",
-      "DeletionPolicy": "Retain",
       "Properties": {
         "CidrBlock": "10.0.0.0/24",
         "AvailabilityZone": {
@@ -427,7 +428,6 @@
     },
     "RouteTable": {
       "Type": "AWS::EC2::RouteTable",
-      "DeletionPolicy": "Retain",
       "Properties": {
         "VpcId": {
           "Ref": "VPC"
@@ -444,7 +444,6 @@
     },
     "AssociationRtToPubSub": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DeletionPolicy": "Retain",
       "Properties": {
         "RouteTableId": {
           "Ref": "RouteTable"
@@ -456,7 +455,6 @@
     },
     "InternetGateway": {
       "DependsOn": "VPC",
-      "DeletionPolicy": "Retain",
       "Type": "AWS::EC2::InternetGateway",
       "Properties": {
         "Tags": [
@@ -475,7 +473,6 @@
         "InternetGateway"
       ],
       "Type": "AWS::EC2::VPCGatewayAttachment",
-      "DeletionPolicy": "Retain",
       "Properties": {
         "InternetGatewayId": {
           "Ref": "InternetGateway"
@@ -488,7 +485,6 @@
     "Route": {
       "Type": "AWS::EC2::Route",
       "DependsOn": "AttachGatewayToVPC",
-      "DeletionPolicy": "Retain",
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
@@ -501,7 +497,6 @@
     },
     "VPC": {
       "Type": "AWS::EC2::VPC",
-      "DeletionPolicy": "Retain",
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "InstanceTenancy": "default",
@@ -605,7 +600,7 @@
         }
       }
     },
-    "SecurityGroupInternalSelfIngress": {
+    "SecurityGroupInternalSelfIngress80": {
       "Type": "AWS::EC2::SecurityGroupIngress",
       "DependsOn": "SecurityGroupInternal",
       "Properties": {
@@ -616,12 +611,28 @@
           "Ref": "SecurityGroupInternal"
         },
         "IpProtocol": "tcp",
-        "ToPort": "65535",
-        "FromPort": "0"
+        "ToPort": "80",
+        "FromPort": "80"
+      }
+    },
+    "SecurityGroupInternalSelfIngress443": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "DependsOn": "SecurityGroupInternal",
+      "Properties": {
+        "GroupId": {
+          "Ref": "SecurityGroupInternal"
+        },
+        "SourceSecurityGroupId": {
+          "Ref": "SecurityGroupInternal"
+        },
+        "IpProtocol": "tcp",
+        "ToPort": "443",
+        "FromPort": "443"
       }
     },
     "ELB": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "DependsOn": "AttachGatewayToVPC",
       "Properties": {
         "Subnets": [
           {

@@ -1,5 +1,6 @@
 ELB do
   Type "AWS::ElasticLoadBalancing::LoadBalancer"
+  DependsOn "AttachGatewayToVPC"
   Properties do
     Subnets [
       _{
