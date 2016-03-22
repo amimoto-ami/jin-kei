@@ -18,6 +18,7 @@ EC2 do
             owner "root"
             group "root"
           end
+		  _include "include/ec2/metadata-for-codecommit.rb"
 		  _include "include/ec2/metadata-for-rds.rb"
         end
       end
