@@ -15,6 +15,7 @@ Parameters do
   _include "params/subnets.rb"
   _include "params/ec2_instance.rb"
   _include "params/rds_settings.rb"
+  _include "params/codecommit_arn.rb"
 end
 
 Resources do

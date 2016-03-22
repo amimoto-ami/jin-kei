@@ -1,5 +1,6 @@
 _include "include/iam/policies/allow-invalidation.rb"
 _include "include/iam/policies/s3-bucket.rb"
+_include "include/iam/policies/codecommit_push_and_pull.rb"
 
 IAMRoleForStack002 do
   Type "AWS::IAM::Role"
@@ -11,7 +12,9 @@ IAMRoleForStack002 do
     ManagedPolicyArns [
       _{ Ref "IAMPolicyForCloudFront" },
       _{ Ref "IAMPolicyForS3Media" },
-      _{ Ref "IAMRoleForCodeDeploy" }
+      _{ Ref "IAMPolicyForCodeDeploy" },
+      _{ Ref "IAMPolicyForCodeCommit" }
+
     ]
     AssumeRolePolicyDocument do
       Version "2012-10-17"
