@@ -10,7 +10,8 @@ IAMRoleForStack002 do
   Properties do
     ManagedPolicyArns [
       _{ Ref "IAMPolicyForCloudFront" },
-      _{ Ref "IAMPolicyForS3Media" }
+      _{ Ref "IAMPolicyForS3Media" },
+      _{ Ref "IAMRoleForCodeDeploy" }
     ]
     AssumeRolePolicyDocument do
       Version "2012-10-17"
