@@ -16,6 +16,7 @@ Parameters do
   _include "params/subnets.rb"
   _include "params/ec2_instance.rb"
   _include "params/rds_settings.rb"
+  _include "params/wp_install.rb"
 end
 
 Resources do
