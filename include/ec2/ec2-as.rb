@@ -18,7 +18,7 @@ EC2 do
             owner "root"
             group "root"
           end
-		  _include "include/ec2/metadata-for-rds.rb"
+		  _include "include/ec2/metadata-for-autoscale.rb"
         end
       end
     end
