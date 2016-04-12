@@ -1,7 +1,7 @@
 _path("/opt/aws/cloud_formation.json") do
 	content '{
 		"rds" : {
-			"database" : "wordpress_stg",
+			"database" : "wordpress",
 			"username" : "amimoto",
 			"password" : "{{password}}",
 			"endpoint" : "{{endpoint}}",
