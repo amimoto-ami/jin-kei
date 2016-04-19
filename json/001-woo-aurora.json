@@ -49,7 +49,7 @@
     "KeyName": {
       "Description": "Name of an existing EC2 key pair to enable SSH access to the instances",
       "Type": "AWS::EC2::KeyPair::KeyName",
-      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+      "ConstraintDescription": "Must be the name of an existing EC2 KeyPair."
     },
     "SSHLocation": {
       "Description": "The IP address range that can be used to SSH to the EC2 instances",
@@ -57,14 +57,14 @@
       "MinLength": "9",
       "MaxLength": "18",
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
-      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+      "ConstraintDescription": "Must be a valid IP CIDR range of the form x.x.x.x/x."
     },
     "AvailabilityZone": {
-      "Description": "Pick an AvailabilityZone for Primary Subnet. Public subnet will creates in here.",
+      "Description": "Pick an AvailabilityZone for the Primary Subnet. The public subnet will be created in this zone.",
       "Type": "AWS::EC2::AvailabilityZone::Name"
     },
     "SecondaryAvailabilityZone": {
-      "Description": "Pick an AvailabilityZone for Secondary Subnet.This zone is used by RDS.",
+      "Description": "Pick an AvailabilityZone for the RDS database.",
       "Type": "AWS::EC2::AvailabilityZone::Name"
     },
     "InstanceType": {
@@ -91,6 +91,7 @@
         "c4.2xlarge",
         "c4.4xlarge",
         "c4.8xlarge",
+        "g2.2xlarge",
         "hi1.4xlarge",
         "hs1.8xlarge",
         "i2.xlarge",
@@ -103,24 +104,24 @@
         "r3.4xlarge",
         "r3.8xlarge"
       ],
-      "ConstraintDescription": "must be a valid EC2 instance type."
+      "ConstraintDescription": "Must be a valid EC2 instance type."
     },
     "MySQLPassword": {
-      "Description": "Password of RDS User",
+      "Description": "Password for the RDS User",
       "Type": "String",
       "MinLength": "8",
       "MaxLength": "64",
       "NoEcho": "true"
     },
     "MulitiAZDatabase": {
-      "Description": "Crate a Multi-AZ RDS Database Instance",
+      "Description": "Create a Multi-AZ RDS Database Instance",
       "Default": "true",
       "Type": "String",
       "AllowedValues": [
         "true",
         "false"
       ],
-      "ConstraintDescription": "must be either true or false"
+      "ConstraintDescription": "Must be either true or false"
     },
     "RDSInstanceType": {
       "Description": "Aurora RDS Instance Type",
@@ -141,7 +142,7 @@
       "Type": "Number",
       "MinValue": "5",
       "MaxValue": "3072",
-      "ConstraintDescription": "must be between 5 and 3072Gb."
+      "ConstraintDescription": "Must be between 5 and 3072Gb."
     }
   },
   "Resources": {
@@ -1083,13 +1084,13 @@
   },
   "Outputs": {
     "EC2InstanceId": {
-      "Description": "Access for the first time, Please input it.",
+      "Description": "Instance ID required for first login. Please make a note of this value.",
       "Value": {
         "Ref": "EC2"
       }
     },
     "WebSiteURL": {
-      "Description": "WordPress Site URL  (Please wait a few minutes for the upgrade of WordPress to access for the first time.)",
+      "Description": "WordPress Site URL (Please wait a few minutes for the installation to complete before accessing.)",
       "Value": {
         "Fn::Join": [
           "",
@@ -1106,13 +1107,13 @@
       }
     },
     "CloudFrontDistributionId": {
-      "Description": "This is CloudFront Disctribution ID. Please set 'C3 CloudFlont Cache Clear' plugin on admin page.",
+      "Description": "This is the CloudFront Disctribution ID. Please set the 'C3 CloudFlont Cache Clear' plugin on admin page.",
       "Value": {
         "Ref": "CloudFront"
       }
     },
     "S3MediaBucketURL": {
-      "Description": "This is S3 Bucket URL. Please set 'Nephila clavata' Plugin on admin page.",
+      "Description": "This is the S3 Bucket URL. Please set 'Nephila clavata' Plugin on admin page.",
       "Value": {
         "Fn::GetAtt": [
           "S3Media",
