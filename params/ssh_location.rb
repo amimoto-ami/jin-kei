@@ -4,6 +4,6 @@ SSHLocation do
   MinLength 9
   MaxLength 18
   AllowedPattern "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-  ConstraintDescription "must be a valid IP CIDR range of the form x.x.x.x/x."
+  ConstraintDescription "Must be a valid IP CIDR range of the form x.x.x.x/x."
 end
 

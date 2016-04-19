@@ -33,5 +33,5 @@ InstanceType do
 				"r3.2xlarge",
 				"r3.4xlarge",
 				"r3.8xlarge"
-  ConstraintDescription "must be a valid EC2 instance type."
+  ConstraintDescription "Must be a valid EC2 instance type."
 end
