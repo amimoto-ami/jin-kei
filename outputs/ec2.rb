@@ -1,5 +1,5 @@
 EC2InstanceId do
-  Description "Access for the first time, Please input it."
+  Description "Instance ID required for first login. Please make a note of this value."
   Value do
     Ref "EC2"
   end

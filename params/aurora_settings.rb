@@ -1,5 +1,5 @@
 MySQLPassword do
-  Description "Password of RDS User"
+  Description "Password for the RDS User"
   Type        "String"
   MinLength   8
   MaxLength   64
@@ -7,11 +7,11 @@ MySQLPassword do
 end
 
 MulitiAZDatabase do
-  Description           "Crate a Multi-AZ RDS Database Instance"
+  Description           "Create a Multi-AZ RDS Database Instance"
   Default               true
   Type                  "String"
   AllowedValues         "true","false"
-  ConstraintDescription "must be either true or false"
+  ConstraintDescription "Must be either true or false"
 end
 
 RDSInstanceType do
@@ -28,5 +28,5 @@ DBAllocatedStorage do
   Type                  "Number"
   MinValue              5
   MaxValue              3072
-  ConstraintDescription "must be between 5 and 3072Gb."
+  ConstraintDescription "Must be between 5 and 3072Gb."
 end
