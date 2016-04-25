@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WordPress powered by JINKEI (Simple Stack For Woo ) Version1.0.1\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "WordPress powered by JINKEI (Simple Stack For Woo ) Version1.2.1\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
@@ -164,7 +164,7 @@
                 "group": "root"
               },
               "/opt/aws/cloud_formation.json": {
-                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  }\n\t}",
+                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  },\n\t  \"s3_conf\": {\n\t\t  \"region\": \"{{s3region}}\",\n\t\t  \"bucket\": \"{{s3bucket}}\",\n\t\t  \"url\": \"{{s3url}}\",\n\t\t  \"storage\": \"STANDARD\"\n\t  }\n\t}",
                 "context": {
                   "endpoint": {
                     "Fn::GetAtt": [
@@ -175,7 +175,19 @@
                   "password": {
                     "Ref": "MySQLPassword"
                   },
-                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)"
+                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)",
+                  "s3bucket": {
+                    "Ref": "S3Media"
+                  },
+                  "s3url": {
+                    "Fn::GetAtt": [
+                      "S3Media",
+                      "WebsiteURL"
+                    ]
+                  },
+                  "s3region": {
+                    "Ref": "AWS::Region"
+                  }
                 },
                 "mode": "00644",
                 "owner": "root",
