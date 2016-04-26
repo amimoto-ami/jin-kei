@@ -1,48 +1,38 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WordPress powered by JINKEI (Simple Stack For Woo with Amazon Aurora & HHVM ) Version1.0.1\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(Amazon Aurora).\n",
+  "Description": "WordPress powered by JINKEI (Simple Stack For Woo MOD_PHP7 ) Version1.2.1\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
-        "AMI": "ami-002c9e73"
+        "AMI": "ami-6bd95618"
       },
       "ap-southeast-1": {
-        "AMI": "ami-f0975e93"
+        "AMI": "ami-3f0dd95c"
       },
       "ap-southeast-2": {
-        "AMI": "ami-5094b333"
+        "AMI": "ami-f1210c92"
       },
       "eu-central-1": {
-        "AMI": "ami-bd1a00d1"
+        "AMI": "ami-88d635e7"
       },
       "ap-northeast-2": {
-        "AMI": "ami-0b27e965"
+        "AMI": "ami-6114dc0f"
       },
       "ap-northeast-1": {
-        "AMI": "ami-be3031d0"
+        "AMI": "ami-3b293755"
       },
       "us-east-1": {
-        "AMI": "ami-ec437286"
+        "AMI": "ami-fe021a94"
       },
       "sa-east-1": {
-        "AMI": "ami-c50380a9"
+        "AMI": "ami-d30f81bf"
       },
       "us-west-1": {
-        "AMI": "ami-bdafdedd"
+        "AMI": "ami-f1c9b691"
       },
       "us-west-2": {
-        "AMI": "ami-9232d1f2"
+        "AMI": "ami-8734c5e7"
       }
-    }
-  },
-  "Conditions": {
-    "CreateSecDB": {
-      "Fn::Equals": [
-        {
-          "Ref": "MulitiAZDatabase"
-        },
-        true
-      ]
     }
   },
   "Parameters": {
@@ -115,7 +105,7 @@
     },
     "MulitiAZDatabase": {
       "Description": "Create a Multi-AZ RDS Database Instance",
-      "Default": "true",
+      "Default": "false",
       "Type": "String",
       "AllowedValues": [
         "true",
@@ -124,10 +114,24 @@
       "ConstraintDescription": "Must be either true or false"
     },
     "RDSInstanceType": {
-      "Description": "Aurora RDS Instance Type",
-      "Default": "db.r3.large",
+      "Description": "RDS Instance Type",
+      "Default": "db.t2.medium",
       "Type": "String",
       "AllowedValues": [
+        "db.t2.micro",
+        "db.t2.small",
+        "db.t2.medium",
+        "db.m1.small",
+        "db.m1.medium",
+        "db.m1.large",
+        "db.m1.xlarge",
+        "db.m3.medium",
+        "db.m3.large",
+        "db.m3.xlarge",
+        "db.m3.2xlarge",
+        "db.m2.xlarge",
+        "db.m2.2xlarge",
+        "db.m2.4xlarge",
         "db.r3.large",
         "db.r3.xlarge",
         "db.r3.2xlarge",
@@ -148,6 +152,7 @@
   "Resources": {
     "EC2": {
       "Type": "AWS::EC2::Instance",
+      "DependsOn": "AttachGatewayToVPC",
       "Metadata": {
         "AWS::CloudFormation::Init": {
           "config": {
@@ -159,18 +164,30 @@
                 "group": "root"
               },
               "/opt/aws/cloud_formation.json": {
-                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  }\n\t}",
+                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  },\n\t  \"s3_conf\": {\n\t\t  \"region\": \"{{s3region}}\",\n\t\t  \"bucket\": \"{{s3bucket}}\",\n\t\t  \"url\": \"{{s3url}}\",\n\t\t  \"storage\": \"STANDARD\"\n\t  }\n\t}",
                 "context": {
                   "endpoint": {
                     "Fn::GetAtt": [
-                      "RDSCluster",
+                      "RDS",
                       "Endpoint.Address"
                     ]
                   },
                   "password": {
                     "Ref": "MySQLPassword"
                   },
-                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)"
+                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)",
+                  "s3bucket": {
+                    "Ref": "S3Media"
+                  },
+                  "s3url": {
+                    "Fn::GetAtt": [
+                      "S3Media",
+                      "WebsiteURL"
+                    ]
+                  },
+                  "s3region": {
+                    "Ref": "AWS::Region"
+                  }
                 },
                 "mode": "00644",
                 "owner": "root",
@@ -351,63 +368,37 @@
         }
       }
     },
-    "RDSCluster": {
-      "Type": "AWS::RDS::DBCluster",
-      "Properties": {
-        "Engine": "aurora",
-        "DatabaseName": "wordpress",
-        "PreferredBackupWindow": "00:00-00:30",
-        "PreferredMaintenanceWindow": "sun:16:00-sun:17:30",
-        "AvailabilityZones": [
-          {
-            "Ref": "AvailabilityZone"
-          },
-          {
-            "Ref": "SecondaryAvailabilityZone"
-          }
-        ],
-        "BackupRetentionPeriod": "1",
-        "DBSubnetGroupName": {
-          "Ref": "DBSubnetGroup"
-        },
-        "MasterUsername": "amimoto",
-        "MasterUserPassword": {
-          "Ref": "MySQLPassword"
-        },
-        "Port": "3306",
-        "VpcSecurityGroupIds": [
-          {
-            "Ref": "RDSSecurityGroup"
-          }
-        ],
-        "Tags": [
-          {
-            "Key": "Application",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          }
-        ]
-      }
-    },
-    "RDSA": {
+    "RDS": {
       "Type": "AWS::RDS::DBInstance",
+      "DeletionPolicy": "Snapshot",
       "Properties": {
-        "Engine": "aurora",
-        "DBClusterIdentifier": {
-          "Ref": "RDSCluster"
+        "AllocatedStorage": {
+          "Ref": "DBAllocatedStorage"
         },
         "AllowMajorVersionUpgrade": "true",
         "AutoMinorVersionUpgrade": "true",
         "AvailabilityZone": {
           "Ref": "AvailabilityZone"
         },
-        "DBSubnetGroupName": {
-          "Ref": "DBSubnetGroup"
-        },
+        "BackupRetentionPeriod": "1",
         "DBInstanceClass": {
           "Ref": "RDSInstanceType"
         },
+        "DBName": "wordpress",
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroup"
+        },
+        "Engine": "MariaDB",
+        "MasterUsername": "amimoto",
+        "MasterUserPassword": {
+          "Ref": "MySQLPassword"
+        },
+        "MultiAZ": {
+          "Ref": "MulitiAZDatabase"
+        },
+        "Port": "3306",
+        "PreferredBackupWindow": "00:00-00:30",
+        "PreferredMaintenanceWindow": "sun:16:00-sun:17:30",
         "Tags": [
           {
             "Key": "Application",
@@ -415,34 +406,10 @@
               "Ref": "AWS::StackName"
             }
           }
-        ]
-      }
-    },
-    "RDSB": {
-      "Type": "AWS::RDS::DBInstance",
-      "Condition": "CreateSecDB",
-      "Properties": {
-        "Engine": "aurora",
-        "DBClusterIdentifier": {
-          "Ref": "RDSCluster"
-        },
-        "AllowMajorVersionUpgrade": "true",
-        "AutoMinorVersionUpgrade": "true",
-        "AvailabilityZone": {
-          "Ref": "SecondaryAvailabilityZone"
-        },
-        "DBSubnetGroupName": {
-          "Ref": "DBSubnetGroup"
-        },
-        "DBInstanceClass": {
-          "Ref": "RDSInstanceType"
-        },
-        "Tags": [
+        ],
+        "VPCSecurityGroups": [
           {
-            "Key": "Application",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
+            "Ref": "RDSSecurityGroup"
           }
         ]
       }
