@@ -19,9 +19,9 @@ Conditions do
   end
 end
 Parameters do
-  _include "001-base-param.rb"
+  _include "params/001-base-param.rb"
   _include "params/ec2_instance.rb"
   _include "params/aurora_settings.rb"
 end
-_include "001-aurora-resource.rb"
-_include "001-base-output.rb"
+_include "include/001-aurora-resource.rb"
+_include "outputs/001-base-output.rb"
