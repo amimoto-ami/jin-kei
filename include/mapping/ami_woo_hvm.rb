@@ -1,0 +1,14 @@
+MPAmimotov4(
+  {
+  "eu-west-1"=>{"AMI"=>"ami-bcdb54cf"},
+  "ap-southeast-1"=>{"AMI"=>"ami-960dd9f5"},
+  "ap-southeast-2"=>{"AMI"=>"ami-f4260b97"},
+  "eu-central-1"=>{"AMI"=>"ami-90d033ff"},
+  "ap-northeast-2"=>{"AMI"=>"ami-012ae26f"},
+  "ap-northeast-1"=>{"AMI"=>"ami-38293756"},
+  "us-east-1"=>{"AMI"=>"ami-98051df2"},
+  "sa-east-1"=>{"AMI"=>"ami-6a67e806"},
+  "us-west-1"=>{"AMI"=>"ami-20ccb340"},
+  "us-west-2"=>{"AMI"=>"ami-743bca14"},
+ }
+)
