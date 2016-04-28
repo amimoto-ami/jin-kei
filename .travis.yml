@@ -13,4 +13,4 @@ script:
     - ls -al 001.rb
 
 after_success:
-    - kumogata convert 001.rbku
+    - kumogata convert 001.rb
