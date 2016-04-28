@@ -4,3 +4,13 @@ rvm:
 - 1.9.3
 - jruby-19mode
 - rbx-2
+
+
+before_script:
+    - gem install kumogata
+
+script:
+    - ls -al 001.rb
+
+after_success:
+    - kumogata convert 001.rbku
