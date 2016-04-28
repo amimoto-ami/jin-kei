@@ -2,8 +2,9 @@ language: ruby
 rvm:
 - 2.0.0
 
+
 script:
-    - bash ./validate.sh
+    - bash /bin/bash validate.sh
 
 after_success:
     - kumogata convert 001.rb
