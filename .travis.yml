@@ -4,7 +4,7 @@ rvm:
 
 
 script:
-    - bash /bin/bash validate.sh
+    - bash validate.sh
 
 after_success:
     - kumogata convert 001.rb
