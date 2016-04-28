@@ -3,7 +3,7 @@ rvm:
 - 2.0.0
 
 script:
-    - ls -al 001.rb
+    - bash ./validate.sh
 
 after_success:
     - kumogata convert 001.rb
