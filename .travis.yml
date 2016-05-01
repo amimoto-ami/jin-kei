@@ -6,6 +6,8 @@ before_script:
     - gem install kumogata
 
 script:
+    - kumogata validate 001.rb
+    - which kumogata
     - bash validate.sh
 
 after_success:
