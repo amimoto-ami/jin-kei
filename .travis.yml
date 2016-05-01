@@ -2,18 +2,11 @@ language: ruby
 rvm:
 - 2.0.0
 
+before_script:
+    - gem install kumogata
 
 script:
-    - kumogata validate 001.rb
-    - kumogata validate 001-mod.rb
-    - kumogata validate 001-hhvm.rb
-    - kumogata validate 001-hvm-aurora.rb
-    - kumogata validate 001-woo-aurora.rb
-    - kumogata validate 001-mod-aurora.rb
-    - kumogata validate 001-hhvm-aurora.rb
-    - kumogata validate 001-woo-hvm.rb
-    - kumogata validate 001-woo-hhvm.rb
-    - kumogata validate 001-woo-mod.rb
+    - bash validate.sh
 
 after_success:
     - kumogata convert 001.rb
