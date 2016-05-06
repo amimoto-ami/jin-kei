@@ -8,7 +8,6 @@ before_script:
 script:
     - kumogata validate 001.rb
     - which kumogata
-    - bash validate.sh
 
 after_success:
     - kumogata convert 001.rb
