@@ -3,11 +3,10 @@ rvm:
 - 2.0.0
 
 before_script:
-    - gem install kumogata
+    - which kumogata
 
 script:
     - bash validate.sh
-    - which kumogata
 
 after_success:
     - bash ./bin/deploy.sh
