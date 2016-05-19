@@ -6,8 +6,13 @@ before_script:
     - gem install kumogata
 
 script:
+    - bash validate.sh
     - kumogata validate 001.rb
     - which kumogata
 
 after_success:
     - kumogata convert 001.rb
+
+env:
+  global:
+    - secure: "l1asoEp6UBptp9tVjQqyd+6UnaDJpt15f8KL9P20CF/Y7QOfLMQgJ+wSWLMYSI8okkFh3RrizMkLwCSbg5juyR4ywK092x/mOfwD/4zW9D45c+R//j4iU+/nNMmVlar1mCVo0u2gFo57RKBfG6CDKmzATRNXlzr/8q+0ss2NyhRm4+UtZp1PAlNeaogr/sqLb5if/K/9dT1sgQH44OPLyIq7WedqtOdkgcw9O5t8ENPs7sEmL/+5vdcGw9qYy4E0zMBfWUxrGjZEWdADM1H08qHIKxwrl+sK0Oisc09/eaXaTbNo1pJyn3lz99n6UOB3ncTwNkCmZFaNiSlRtn7zWoRi/eVRzmaMkCe4KR0hQUqv+R/qvQmVx6zF3Kr/3/z22rGReLeBndTyY7H9m58R9RrJqXL9WWetda3M49EB/Xyj4xVwuRSdYYWZ9BBIAKHMl+11zbcftSLtQmbXi9l9T/s6nulge4RuP828K2eN8ppokryHeDbklKaAw4QkxkJvIsrRBzB5mUqlH9bxNSgtYhA0QBL4oggWA5Cqyd+sfrJmZ7/x+QaIERBDwfwPwqFKIXdEQwpwLuaI76jg7OuXQiq+jILDP8Z7rIkG1IcYixGiHhUUuOAZGvaweEh9MTxJPdNLLjZUok35FIfpmuiQwZGfnyZjyTKEWZj88VfP/eE="

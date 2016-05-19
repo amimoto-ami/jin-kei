@@ -1,4 +1,5 @@
 #/bin/bash
+echo $AWS_ACCESS
 kumogata validate 001.rb
 kumogata validate 001-mod.rb
 kumogata validate 001-hhvm.rb
