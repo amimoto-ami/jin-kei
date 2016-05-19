@@ -7,7 +7,7 @@ before_script:
 
 script:
     - which kumogata
-    - bash validate.sh
+    - bash ./bin/validate.sh
 
 after_success:
     - bash ./bin/deploy.sh

@@ -7,6 +7,10 @@ if [[ "false" != "$TRAVIS_PULL_REQUEST" ]]; then
 	exit
 fi
 
+if [[ "master" != "$TRAVIS_BRANCH" ]]; then
+	echo "Not on the 'master' branch."
+	exit
+fi
 
 git config user.name $GIT_USER
 git config user.email $GIT_EMAIL
@@ -25,4 +29,4 @@ kumogata convert 001-woo-mod.rb > json/001-woo-mod.json
 git status
 git add json
 git commit --quiet -m "Deploy from travis"
-git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" travis > /dev/null 2>&1
+git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master > /dev/null 2>&1
