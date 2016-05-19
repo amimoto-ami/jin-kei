@@ -1,5 +1,6 @@
 #/bin/bash
-echo $AWS_ACCESS
+echo $AWS_ACCESS_KEY_ID
+echo $AWS_SECRET_ACCESS_KEY
 kumogata validate 001.rb
 kumogata validate 001-mod.rb
 kumogata validate 001-hhvm.rb
