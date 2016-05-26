@@ -2,8 +2,8 @@ namespace :ami do
   require 'amino'
   require 'erb'
 
-  desc "Create ami mapping by query"
-  task :map, 'query'
+  desc "Create ami mapping by query, $ rake ami:map['*Woo*MOD*','woo_mod']"
+  task :map, ['query','output']
   task :map do |t, args|
     amis = {}
     template = File.read('./tasks/ami_template.erb')
@@ -11,9 +11,14 @@ namespace :ami do
     list_regions.map do |region|
       amis[region] = retrieve_id_by_amino(region, args['query'])
     end
-    puts amis
-    $stderr.puts "============="
     puts ERB.new(template, nil, '-').result(binding)
+    if defined?(args['output']) then
+      file_w = open( "./include/mapping/ami_" + args['output'] + ".rb", "w" )
+      file_w.puts( ERB.new(template, nil, '-').result(binding) )
+      file_w.close
+    else
+		puts 'no file outputs'
+    end
   end
 
   desc "show list of AZs"
