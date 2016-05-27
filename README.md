@@ -53,19 +53,7 @@ $ kumogata create \
 ![](./img/stack001.png)
 
 ####Template List
-
-|Template Name|Based AMI|Market Place|Template URL|JSON URL|
-|:--|:--|:--|:--|:--|:--|
-|WordPress powered by JINKEI (Simple Stack HVM) |[WordPress powered by AMIMOTO (HVM)](https://aws.amazon.com/marketplace/pp/B00LWHVJH8/)|https://aws.amazon.com/marketplace/pp/B00LWHVJH8/|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001.json|
-|WordPress powered by JINKEI (Simple Stack HVM with **Amazon Aurora**)|[WordPress powered by AMIMOTO (HVM)](https://aws.amazon.com/marketplace/pp/B00LWHVJH8/)|Now Reviewing|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-hvm-aurora.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-hvm-aurora.json|
-|WordPress powered by JINKEI (Simple Stack HHVM) |[WordPress Powered by AMIMOTO (HHVM)](https://aws.amazon.com/marketplace/pp/B00V5JYXTO/)|https://aws.amazon.com/marketplace/pp/B00V5JYXTO/|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-hhvm.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-hhvm.json|
-|WordPress powered by JINKEI (Simple Stack HHVM with **Amazon Aurora**) |[WordPress Powered by AMIMOTO (HHVM)](https://aws.amazon.com/marketplace/pp/B00V5JYXTO/)|Now Reviewing|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-hhvm-aurora.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-hhvm-aurora.json|
-|WordPress powered by JINKEI (Simple Stack Mod_PHP7) |[WordPress Powered by AMIMOTO (Apache HTTPD PHP7)](https://aws.amazon.com/marketplace/pp/B01B3ZE1NC/)|https://aws.amazon.com/marketplace/pp/B01B3ZE1NC/|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-mod.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-mod.json|
-|WordPress powered by JINKEI (Simple Stack Mod_PHP7 with **Amazon Aurora**) |[WordPress Powered by AMIMOTO (Apache HTTPD PHP7)](https://aws.amazon.com/marketplace/pp/B01B3ZE1NC/)|Now Reviewing|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-mod-aurora.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-mod-aurora.json|
-|WooCommerce powered by JINKEI (Simple Stack HHVM) |[WooCommerce Powered by AMIMOTO (HHVM)](https://aws.amazon.com/marketplace/pp/B00ZGTRMVU/)|https://aws.amazon.com/marketplace/pp/B00ZGTRMVU/|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-woo.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-woo.json|
-|WooCommerce powered by JINKEI (Simple Stack HHVM with **Amazon Aurora**) |[WooCommerce Powered by AMIMOTO (HHVM)](https://aws.amazon.com/marketplace/pp/B00ZGTRMVU/)|Now Reviewing|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-woo-aurora.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-woo-aurora.json|
-|WooCommerce powered by JINKEI (Simple Stack HVM) |[WooCommerce Powered by AMIMOTO (HVM)](https://aws.amazon.com/marketplace/pp/B01DCGKFMQ/)|Now Reviewing|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-woo-hvm.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-woo-hvm.json|
-|WooCommerce powered by JINKEI (Simple Stack Mod_PHP7) |[WooCommerce Powered by AMIMOTO (Apache HTTPD PHP7)](https://aws.amazon.com/marketplace/pp/B01DAONMCK/)|Now Reviewing|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/001-woo-mod.rb|https://github.com/megumiteam/amimoto-enterprise-cfn/blob/master/json/001-woo-mod.json|
+[See Stack Type Wiki](https://github.com/amimoto-ami/amimoto-enterprise-cfn/wiki/Stack-Type)
 
 
 ##Relase Note
