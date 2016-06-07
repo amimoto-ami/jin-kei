@@ -1,5 +1,5 @@
 AvailabilityZone do
-  Description "Pick an AvailabilityZone for the Primary Subnet. The public subnet will be created in this zone."
+  Description "Pick an AvailabilityZone for the Primary Subnet. Public subnet will be created in here."
   Type "AWS::EC2::AvailabilityZone::Name"
 end
 

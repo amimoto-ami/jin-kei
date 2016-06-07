@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WordPress powered by JINKEI (Simple Stack HHVM) Version1.2.1\nThis is a Powerful & Scalable AMIMOTO Stack deployed by CloudFormation.\nAdded an RDS Database for scalability.\nServices used are VPC,EC2,EIP,CloudFront,S3, & RDS(MariaDB).\n",
+  "Description": "WordPress powered by JINKEI (Simple Stack HHVM) Version1.3.0\nThis is a Powerful & Scalable AMIMOTO Stack deployed by CloudFormation.\nAdded an RDS Database for scalability.\nServices used are VPC,EC2,EIP,CloudFront,S3, & RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
@@ -39,7 +39,8 @@
     "KeyName": {
       "Description": "Name of an existing EC2 key pair to enable SSH access to the instances",
       "Type": "AWS::EC2::KeyPair::KeyName",
-      "ConstraintDescription": "Must be the name of an existing EC2 KeyPair."
+      "ConstraintDescription": "Must be the name of an existing EC2 KeyPair.",
+      "MinLength": "1"
     },
     "SSHLocation": {
       "Description": "The IP address range that can be used to SSH to the EC2 instances",
@@ -50,7 +51,7 @@
       "ConstraintDescription": "Must be a valid IP CIDR range of the form x.x.x.x/x."
     },
     "AvailabilityZone": {
-      "Description": "Pick an AvailabilityZone for the Primary Subnet. The public subnet will be created in this zone.",
+      "Description": "Pick an AvailabilityZone for the Primary Subnet. Public subnet will be created in here.",
       "Type": "AWS::EC2::AvailabilityZone::Name"
     },
     "SecondaryAvailabilityZone": {
@@ -831,10 +832,10 @@
               }
             }
           ],
-          "PriceClass": "PriceClass_200",
+          "PriceClass": "PriceClass_All",
           "Enabled": "true",
           "Comment": "Created by AMIMOTO CloudFormation.",
-          "DefaultRootObject": "index.php",
+          "DefaultRootObject": "",
           "DefaultCacheBehavior": {
             "SmoothStreaming": "false",
             "AllowedMethods": [
@@ -857,6 +858,7 @@
             "ForwardedValues": {
               "QueryString": "true",
               "Headers": [
+                "Authorization",
                 "CloudFront-Forwarded-Proto",
                 "CloudFront-Is-Desktop-Viewer",
                 "CloudFront-Is-Mobile-Viewer",
@@ -866,12 +868,14 @@
               "Cookies": {
                 "Forward": "whitelist",
                 "WhitelistedNames": [
-                  "wordpress_????????????????????????????????",
-                  "wordpress_logged_in_*"
+                  "wordpress_*",
+                  "wordpress_logged_in_*",
+                  "wp-postpass_*"
                 ]
               }
             },
-            "ViewerProtocolPolicy": "allow-all"
+            "ViewerProtocolPolicy": "allow-all",
+            "Compress": "true"
           },
           "ViewerCertificate": {
             "CloudFrontDefaultCertificate": "true",
@@ -890,12 +894,14 @@
               "ViewerProtocolPolicy": "allow-all",
               "ForwardedValues": {
                 "Headers": [
+                  "Authorization",
                   "CloudFront-Forwarded-Proto",
                   "CloudFront-Is-Desktop-Viewer",
                   "CloudFront-Is-Mobile-Viewer",
                   "CloudFront-Is-Tablet-Viewer",
                   "Host",
-                  "User-Agent"
+                  "User-Agent",
+                  "Referer"
                 ],
                 "Cookies": {
                   "Forward": "all"
@@ -917,7 +923,8 @@
                 "HEAD",
                 "GET"
               ],
-              "MinTTL": "0"
+              "MinTTL": "0",
+              "Compress": "true"
             },
             {
               "TargetOriginId": {
@@ -926,7 +933,6 @@
               "ViewerProtocolPolicy": "allow-all",
               "ForwardedValues": {
                 "Headers": [
-                  "Accept",
                   "Authorization",
                   "CloudFront-Forwarded-Proto",
                   "CloudFront-Is-Desktop-Viewer",
@@ -940,7 +946,7 @@
                 },
                 "QueryString": "true"
               },
-              "PathPattern": "/wp-admin/",
+              "PathPattern": "/wp-admin/*",
               "SmoothStreaming": "false",
               "AllowedMethods": [
                 "HEAD",
@@ -955,7 +961,8 @@
                 "HEAD",
                 "GET"
               ],
-              "MinTTL": "0"
+              "MinTTL": "0",
+              "Compress": "true"
             },
             {
               "TargetOriginId": {
@@ -964,6 +971,7 @@
               "ViewerProtocolPolicy": "allow-all",
               "ForwardedValues": {
                 "Headers": [
+                  "Authorization",
                   "Host"
                 ],
                 "Cookies": {
@@ -971,7 +979,7 @@
                 },
                 "QueryString": "true"
               },
-              "PathPattern": "/wp-admin/uploads/*",
+              "PathPattern": "/wp-content/uploads/*",
               "SmoothStreaming": "false",
               "AllowedMethods": [
                 "HEAD",
@@ -981,7 +989,8 @@
                 "HEAD",
                 "GET"
               ],
-              "MinTTL": "43200"
+              "MinTTL": "43200",
+              "Compress": "true"
             },
             {
               "TargetOriginId": {
@@ -990,6 +999,7 @@
               "ViewerProtocolPolicy": "allow-all",
               "ForwardedValues": {
                 "Headers": [
+                  "Authorization",
                   "Host"
                 ],
                 "Cookies": {
@@ -1007,7 +1017,8 @@
                 "HEAD",
                 "GET"
               ],
-              "MinTTL": "43200"
+              "MinTTL": "43200",
+              "Compress": "true"
             },
             {
               "TargetOriginId": {
@@ -1016,6 +1027,7 @@
               "ViewerProtocolPolicy": "allow-all",
               "ForwardedValues": {
                 "Headers": [
+                  "Authorization",
                   "Host"
                 ],
                 "Cookies": {
@@ -1033,7 +1045,8 @@
                 "HEAD",
                 "GET"
               ],
-              "MinTTL": "43200"
+              "MinTTL": "43200",
+              "Compress": "true"
             }
           ]
         }

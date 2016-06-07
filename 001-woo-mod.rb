@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
-  WordPress powered by JINKEI (Simple Stack For Woo MOD_PHP7 ) Version1.2.1
-  This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.
+  WordPress powered by JINKEI (Simple Stack For Woo MOD_PHP7 ) Version1.3.0
+  This is powerful & scalable AMIMOTO stack made by CloudFormation.
   Added RDS, Database change more scalable.
   Use service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).
 EOS
