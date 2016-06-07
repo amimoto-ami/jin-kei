@@ -9,7 +9,6 @@ include/mapping/stg/
 
 ## direnv
 /.envrc
-/bin/
 /.direnv/
 
 
