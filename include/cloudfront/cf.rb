@@ -24,10 +24,10 @@ CloudFront do
           end
         }
       ]
-      PriceClass "PriceClass_200"
+      PriceClass "PriceClass_All"
       Enabled true
       Comment "Created by AMIMOTO CloudFormation."
-      DefaultRootObject "index.php"
+      DefaultRootObject ""
       DefaultCacheBehavior do
         SmoothStreaming false
         AllowedMethods [
@@ -50,6 +50,7 @@ CloudFront do
         ForwardedValues do
           QueryString true
           Headers [
+            "Authorization",
             "CloudFront-Forwarded-Proto",
             "CloudFront-Is-Desktop-Viewer",
             "CloudFront-Is-Mobile-Viewer",
@@ -59,13 +60,21 @@ CloudFront do
           Cookies do
             Forward "whitelist"
             WhitelistedNames [
-              "wordpress_????????????????????????????????",
-              "wordpress_logged_in_*"
+              "wordpress_*",
+              "wordpress_logged_in_*",
+              "wp-postpass_*"
             ]
           end
         end
         ViewerProtocolPolicy "allow-all"
+		Compress true
       end
+	  #@TODO:CDN流量計測を考えるとここはONにしたほうがいいかも
+	  #Logging do
+      #    Bucket ""
+      #    Prefix ""
+      #    IncludeCookies false
+	  #end
       ViewerCertificate do
         CloudFrontDefaultCertificate true
         MinimumProtocolVersion "SSLv3"
@@ -83,12 +92,14 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-              "CloudFront-Forwarded-Proto",
-              "CloudFront-Is-Desktop-Viewer",
-              "CloudFront-Is-Mobile-Viewer",
-              "CloudFront-Is-Tablet-Viewer",
-              "Host",
-              "User-Agent"
+			  "Authorization",
+			  "CloudFront-Forwarded-Proto",
+			  "CloudFront-Is-Desktop-Viewer",
+			  "CloudFront-Is-Mobile-Viewer",
+			  "CloudFront-Is-Tablet-Viewer",
+			  "Host",
+			  "User-Agent",
+			  "Referer"
             ]
             Cookies do
               Forward "all"
@@ -111,6 +122,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "0"
+		  Compress true
         },
         _{
           TargetOriginId do
@@ -119,21 +131,20 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-              "Accept",
-              "Authorization",
-              "CloudFront-Forwarded-Proto",
-              "CloudFront-Is-Desktop-Viewer",
-              "CloudFront-Is-Mobile-Viewer",
-              "CloudFront-Is-Tablet-Viewer",
-              "Host",
-              "User-Agent"
+			  "Authorization",
+			  "CloudFront-Forwarded-Proto",
+			  "CloudFront-Is-Desktop-Viewer",
+			  "CloudFront-Is-Mobile-Viewer",
+			  "CloudFront-Is-Tablet-Viewer",
+			  "Host",
+			  "User-Agent"
             ]
             Cookies do
               Forward "all"
             end
             QueryString true
           end
-          PathPattern "/wp-admin/"
+          PathPattern "/wp-admin/*"
           SmoothStreaming false
           AllowedMethods [
             "HEAD",
@@ -149,6 +160,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "0"
+		  Compress true
         },
         _{
           TargetOriginId do
@@ -157,14 +169,15 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-              "Host"
+			  "Authorization",
+			  "Host"
             ]
             Cookies do
               Forward "none"
             end
             QueryString true
           end
-          PathPattern "/wp-admin/uploads/*"
+          PathPattern "/wp-content/uploads/*"
           SmoothStreaming false
           AllowedMethods [
             "HEAD",
@@ -175,6 +188,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "43200"
+		  Compress true
         },
         _{
           TargetOriginId do
@@ -183,7 +197,8 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-              "Host"
+			  "Authorization",
+			  "Host"
             ]
             Cookies do
               Forward "none"
@@ -201,6 +216,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "43200"
+		  Compress true
         },
         _{
           TargetOriginId do
@@ -209,7 +225,8 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-              "Host"
+			  "Authorization",
+			  "Host"
             ]
             Cookies do
               Forward "none"
@@ -227,6 +244,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "43200"
+		  Compress true
         }
       ]
     end
