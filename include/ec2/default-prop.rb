@@ -30,6 +30,26 @@
         Ref "SecurityGroupInternal"
       }
     ]
+    BlockDeviceMappings [
+        _{
+            DeviceName "/dev/sdb"
+            VirtualName "ephemeral0"
+        },
+        _{
+            DeviceName "/dev/sdc"
+            VirtualName "ephemeral1"
+        }#,
+        #@TODO 設定がマネージドと違うらしく、エラーになる。
+        #      起動するのを確認してからコミットする
+        #_{
+        #    DeviceName "/dev/xvda"
+        #    Ebs do
+        #        VolumeSize do
+        #            Ref "EBSVolSize"
+        #        end
+        #    end
+        #}
+    ]
     IamInstanceProfile do
       Ref "IAMForEC2"
     end
