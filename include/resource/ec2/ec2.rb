@@ -1,5 +1,6 @@
 EC2 do
   Type "AWS::EC2::Instance"
+  DependsOn "AttachGatewayToVPC"
   Metadata do
     AWS__CloudFormation__Init do
       config do
@@ -14,7 +15,11 @@ EC2 do
             owner "root"
             group "root"
           end
-		  _include "include/ec2/metadata-for-aurora.rb"
+          if $DB_TYPE == 'rds' then
+            _include "include/ec2/metadata-for-rds.rb"
+          elsif $DB_TYPE == 'aurora' then
+            _include "include/ec2/metadata-for-aurora.rb"
+          end
         end
       end
     end

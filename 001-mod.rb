@@ -1,3 +1,5 @@
+$DB_TYPE = 'rds'
+
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
   WordPress powered by JINKEI (Simple Stack MOD_PHP) Version1.3.0
@@ -15,5 +17,5 @@ Parameters do
   _include "params/ec2_instance.rb"
   _include "params/rds_settings.rb"
 end
-_include "include/001-rds-resource.rb"
+_include "include/resource/simple_stack_base.rb"
 _include "outputs/001-base-output.rb"

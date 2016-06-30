@@ -1,3 +1,5 @@
+$DB_TYPE = 'aurora'
+
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
   WordPress powered by JINKEI (Simple Stack MOD_PHP with Amazon Aurora) Version1.3.0
@@ -23,5 +25,5 @@ Parameters do
   _include "params/ec2_instance.rb"
   _include "params/aurora_settings.rb"
 end
-_include "include/001-aurora-resource.rb"
+_include "include/resource/simple_stack_base.rb"
 _include "outputs/001-base-output.rb"
