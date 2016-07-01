@@ -48,7 +48,21 @@ ASLaunchConfig do
 						_{
 						  Ref "AWS::Region"
 						},
-						".amazonaws.com:/ /var/www/vhosts\n",
+						".amazonaws.com:/ /var/www/html\n",
+
+						## Change web document root dir
+						"tmp_json=`mktemp`\n",
+						"amimoto_json='/opt/local/amimoto.json'\n",
+						"json='{\"wordpress\":{\"document_root\":\"/var/www/html\"}}'\n",
+						"[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
+						"if [ -f $amimoto_json ]; then\n",
+						"  hash jq || /usr/bin/yum install -y jq\n",
+						"  /usr/bin/jq -s '.[0] * .[1]' $amimoto_json <(echo $json) > $tmp_json\n",
+						"else\n",
+						"  echo $json > $tmp_json\n",
+						"fi\n",
+						"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
+
 						"until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done", "\n",
 					]
 				]
