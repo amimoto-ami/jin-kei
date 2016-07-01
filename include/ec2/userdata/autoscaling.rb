@@ -38,7 +38,7 @@
 		"fi\n",
 		"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
 
-		"until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done", "\n",
+		"until find /var/www/html -name wp-config.php  ; do sleep 5 ; done", "\n",
 		"/opt/aws/bin/cfn-signal -e $? -r \"WordPress setup complete\" '",
 		_{ Ref "EC2WaitHandle" }, "'\n"
 	  ]
