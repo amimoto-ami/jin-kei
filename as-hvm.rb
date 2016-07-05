@@ -16,6 +16,8 @@ Parameters do
   _include "params/001-base-param.rb"
   _include "params/ec2_instance.rb"
   _include "params/rds_settings.rb"
+  _include "include/parameters/domain.rb"
+  _include "include/parameters/wordpress.rb"
 end
 
 _include "include/resource/resource_efs.rb"

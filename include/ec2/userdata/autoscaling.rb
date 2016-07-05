@@ -25,6 +25,15 @@
 		},
 		".amazonaws.com:/ /var/www/html\n",
 
+		## Install WP_CLI
+		"WP_CLI=/usr/local/bin/wp\n",
+		"cd /usr/local/bin\n",
+		"/usr/bin/curl -fO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar\n",
+		"if [ -f wp-cli.phar ] ; then\n",
+		  "mv -f wp-cli.phar /usr/local/bin/wp\n",
+		  "chmod +x /usr/local/bin/wp\n",
+		"fi\n",
+
 		## Change web document root dir
 		"tmp_json=`mktemp`\n",
 		"amimoto_json='/opt/local/amimoto.json'\n",
@@ -38,7 +47,31 @@
 		"fi\n",
 		"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
 
-		"until find /var/www/html -name wp-config.php  ; do sleep 5 ; done", "\n",
+		## Waite for Download WordPress
+		"until [ `find /var/www/html -name local-salt.php` ]\n",
+		"do\n",
+		"sleep 5\n",
+		"done\n",
+		"sleep 5\n",
+
+		## Install WordPres
+		"/usr/local/bin/wp core install ",
+		"--url=",
+		_{ Ref "WebSiteDomain"},
+		" ",
+		"--admin_name=",
+		_{ Ref "WPUserName"},
+		" ",
+		"--admin_email=",
+		_{ Ref "WPUserEmail"},
+		" ",
+		"--admin_password=",
+		_{ Ref "WPPassword" },
+		" ",
+		"--path=/var/www/html --allow-root ",
+		" --title='Welcome to the AMIMOTO'",
+		"\n",
+		## EC2 wailt handle
 		"/opt/aws/bin/cfn-signal -e $? -r \"WordPress setup complete\" '",
 		_{ Ref "EC2WaitHandle" }, "'\n"
 	  ]

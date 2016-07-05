@@ -2,6 +2,9 @@ CloudFront do
   Type "AWS::CloudFront::Distribution"
   Properties do
     DistributionConfig do
+      Aliases [
+         _{ Ref "WebSiteDomain" }
+      ]
       Origins [
         _{
           DomainName do

@@ -63,7 +63,12 @@ ASLaunchConfig do
 						"fi\n",
 						"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
 
-						"until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done", "\n",
+						## Waite for Download WordPress
+						"until [ `find /var/www/html -name local-salt.php` ]\n",
+						"do\n",
+						"sleep 5\n",
+						"done\n",
+						"sleep 5\n",
 					]
 				]
 			end
