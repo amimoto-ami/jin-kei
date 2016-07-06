@@ -2,10 +2,16 @@ ASGroup do
 	Type "AWS::AutoScaling::AutoScalingGroup"
 	Properties do
 		Cooldown "600"
-		DesiredCapacity "2"
+		DesiredCapacity do
+			Ref "AutoScalingDesiredCapacity"
+		end
 		HealthCheckType "EC2"
-		MaxSize "10"
-		MinSize "0"
+		MaxSize do
+			Ref "AutoScalingMaxSize"
+		end
+		MinSize do
+			Ref "AutoScalingMinSize"
+		end
 		AvailabilityZones [
 			_{
 				Ref "AvailabilityZone"
