@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WordPress powered by JINKEI (Simple Stack For Woo MOD_PHP7 ) Version1.3.0\nThis is powerful & scalable AMIMOTO stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "WooCommerce Powered by JINKEI (Simple Stack MOD_PHP7 ) Version1.3.0\nThis is powerful & scalable AMIMOTO stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {
