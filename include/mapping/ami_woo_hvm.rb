@@ -6,6 +6,7 @@ MPAmimotov4(
   "eu-central-1"=>{"AMI"=>"ami-90d033ff"},
   "ap-northeast-2"=>{"AMI"=>"ami-012ae26f"},
   "ap-northeast-1"=>{"AMI"=>"ami-38293756"},
+  "ap-south-1"=>{"AMI"=>"ami-98051df2"},
   "us-east-1"=>{"AMI"=>"ami-98051df2"},
   "sa-east-1"=>{"AMI"=>"ami-6a67e806"},
   "us-west-1"=>{"AMI"=>"ami-20ccb340"},
