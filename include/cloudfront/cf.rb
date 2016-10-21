@@ -2,9 +2,11 @@ CloudFront do
   Type "AWS::CloudFront::Distribution"
   Properties do
     DistributionConfig do
-      Aliases [
-         _{ Ref "WebSiteDomain" }
-      ]
+      if $Stack_Type == 'autoscale' then
+        Aliases [
+            _{ Ref "WebSiteDomain" }
+        ]
+      end
       Origins [
         _{
           DomainName do

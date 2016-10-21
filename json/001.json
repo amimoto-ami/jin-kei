@@ -3,35 +3,41 @@
   "Description": "WordPress powered by JINKEI (Simple Stack HVM) Version1.3.0\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Mappings": {
     "MPAmimotov4": {
+      "ap-south-1": {
+        "AMI": "ami-d8c8a2b7"
+      },
       "eu-west-1": {
-        "AMI": "ami-3b289a48"
-      },
-      "ap-southeast-1": {
-        "AMI": "ami-39945d5a"
-      },
-      "ap-southeast-2": {
-        "AMI": "ami-9f93b4fc"
-      },
-      "eu-central-1": {
-        "AMI": "ami-181a0074"
+        "AMI": "ami-67d95614"
       },
       "ap-northeast-2": {
-        "AMI": "ami-4c2be522"
+        "AMI": "ami-e229e18c"
       },
       "ap-northeast-1": {
-        "AMI": "ami-d42c2dba"
-      },
-      "us-east-1": {
-        "AMI": "ami-0c417066"
+        "AMI": "ami-aa2937c4"
       },
       "sa-east-1": {
-        "AMI": "ami-da0083b6"
+        "AMI": "ami-c10c82ad"
+      },
+      "ap-southeast-1": {
+        "AMI": "ami-cc0fdbaf"
+      },
+      "ap-southeast-2": {
+        "AMI": "ami-f7200d94"
+      },
+      "eu-central-1": {
+        "AMI": "ami-d9d635b6"
+      },
+      "us-east-1": {
+        "AMI": "ami-f738209d"
+      },
+      "us-east-2": {
+        "AMI": "ami-d8643fbd"
       },
       "us-west-1": {
-        "AMI": "ami-efafde8f"
+        "AMI": "ami-e1cbb481"
       },
       "us-west-2": {
-        "AMI": "ami-2835d648"
+        "AMI": "ami-bb36c7db"
       }
     }
   },
