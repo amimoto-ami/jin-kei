@@ -12,7 +12,7 @@ namespace :ami do
       amis[region] = retrieve_id_by_amino(region, args['query'])
     end
     puts ERB.new(template, nil, '-').result(binding)
-    if defined?(args['output']) then
+    if args['output'] then
       file_w = open( "./include/mapping/ami_" + args['output'] + ".rb", "w" )
       file_w.puts( ERB.new(template, nil, '-').result(binding) )
       file_w.close
@@ -40,6 +40,7 @@ namespace :ami do
 
   def retrieve_id_by_amino(region, query)
     ami = Amino({'name' => query, 'product-code.type' => "marketplace"}, {region: region}).last
+    return nil unless ami
     $stderr.puts [region, ami.name, ami.creation_date].join(": ")
     ami.image_id
   end
