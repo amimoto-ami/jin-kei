@@ -1,6 +1,7 @@
 MPAmimotov4(
   {
 <% amis.each_pair do |key, id| -%>
+<% next unless id -%>
   "<%= key %>"=>{"AMI"=>"<%= id %>"},
 <% end -%>
  }
