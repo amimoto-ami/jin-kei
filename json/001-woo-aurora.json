@@ -1,6 +1,47 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "WooCommerce Powered by JINKEI (Simple Stack Amazon Aurora & HHVM ) Version1.3.0\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(Amazon Aurora).\n",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Select Locations"
+          },
+          "Parameters": [
+            "AvailabilityZone",
+            "SecondaryAvailabilityZone"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Amazon EC2 Configuration"
+          },
+          "Parameters": [
+            "InstanceType",
+            "KeyName",
+            "SSHLocation"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Amazon RDS Configuration"
+          },
+          "Parameters": [
+            "RDSInstanceType",
+            "MySQLPassword",
+            "MulitiAZDatabase",
+            "DBAllocatedStorage"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "VPCID": {
+          "default": "Which VPC should this be deployed to?"
+        }
+      }
+    }
+  },
   "Mappings": {
     "MPAmimotov4": {
       "eu-west-1": {

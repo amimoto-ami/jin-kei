@@ -7,6 +7,10 @@ Description (<<-EOS).undent
   Use service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB),EFS,AutoScale,CloudWatch.
 EOS
 
+Metadata do
+  _include "metadata/autoscale_rds.rb"
+end
+
 Mappings do
   _include "include/mapping/ami_as.rb"
 end
