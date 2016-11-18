@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WooCommerce Powered by JINKEI (Simple Stack MOD_PHP7 ) Version1.3.0\nThis is powerful & scalable AMIMOTO stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "WooCommerce Powered by JINKEI (Simple Stack MOD_PHP7 ) Version1.4.0\nThis is powerful & scalable AMIMOTO stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [
@@ -44,8 +44,20 @@
   },
   "Mappings": {
     "MPAmimotov4": {
+      "ap-south-1": {
+        "AMI": "ami-c61c76a9"
+      },
       "eu-west-1": {
         "AMI": "ami-6bd95618"
+      },
+      "ap-northeast-2": {
+        "AMI": "ami-6114dc0f"
+      },
+      "ap-northeast-1": {
+        "AMI": "ami-3b293755"
+      },
+      "sa-east-1": {
+        "AMI": "ami-d30f81bf"
       },
       "ap-southeast-1": {
         "AMI": "ami-3f0dd95c"
@@ -56,17 +68,8 @@
       "eu-central-1": {
         "AMI": "ami-88d635e7"
       },
-      "ap-northeast-2": {
-        "AMI": "ami-6114dc0f"
-      },
-      "ap-northeast-1": {
-        "AMI": "ami-3b293755"
-      },
       "us-east-1": {
         "AMI": "ami-fe021a94"
-      },
-      "sa-east-1": {
-        "AMI": "ami-d30f81bf"
       },
       "us-west-1": {
         "AMI": "ami-f1c9b691"

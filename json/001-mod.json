@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WordPress powered by JINKEI (Simple Stack MOD_PHP) Version1.3.0\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "WordPress powered by JINKEI (Simple Stack MOD_PHP) Version1.4.0\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [
@@ -44,35 +44,38 @@
   },
   "Mappings": {
     "MPAmimotov4": {
+      "ap-south-1": {
+        "AMI": "ami-8dc8a2e2"
+      },
       "eu-west-1": {
-        "AMI": "ami-30289a43"
-      },
-      "ap-southeast-1": {
-        "AMI": "ami-7da9601e"
-      },
-      "ap-southeast-2": {
-        "AMI": "ami-5295b231"
-      },
-      "eu-central-1": {
-        "AMI": "ami-5a647e36"
+        "AMI": "ami-60db5413"
       },
       "ap-northeast-2": {
-        "AMI": "ami-492de327"
+        "AMI": "ami-1117df7f"
       },
       "ap-northeast-1": {
-        "AMI": "ami-1e2e2f70"
-      },
-      "us-east-1": {
-        "AMI": "ami-58417032"
+        "AMI": "ami-992836f7"
       },
       "sa-east-1": {
-        "AMI": "ami-9e7dfef2"
+        "AMI": "ami-c20c82ae"
+      },
+      "ap-southeast-1": {
+        "AMI": "ami-9d0edafe"
+      },
+      "ap-southeast-2": {
+        "AMI": "ami-cb260ba8"
+      },
+      "eu-central-1": {
+        "AMI": "ami-c5d635aa"
+      },
+      "us-east-1": {
+        "AMI": "ami-20051d4a"
       },
       "us-west-1": {
-        "AMI": "ami-7aafde1a"
+        "AMI": "ami-d7cab5b7"
       },
       "us-west-2": {
-        "AMI": "ami-5d35d63d"
+        "AMI": "ami-fa38c99a"
       }
     }
   },

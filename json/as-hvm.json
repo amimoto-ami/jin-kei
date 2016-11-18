@@ -1,37 +1,78 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "WordPress powered by JINKEI (AutoScaling HVM) Version1.0.0\nSupported AutoScaling, it is really Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB),EFS,AutoScale,CloudWatch.\n",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Select Locations"
+          },
+          "Parameters": [
+            "AvailabilityZone",
+            "SecondaryAvailabilityZone"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Amazon EC2 Configuration"
+          },
+          "Parameters": [
+            "InstanceType",
+            "KeyName",
+            "SSHLocation"
+          ]
+        },
+        {
+          "Label": {
+            "default": "EC2 AutoScaling Configuration"
+          },
+          "Parameters": [
+            "AutoScalingMinSize",
+            "AutoScalingMaxSize",
+            "AutoScalingDesiredCapacity"
+          ]
+        },
+        {
+          "Label": {
+            "default": "WordPress Configuration"
+          },
+          "Parameters": [
+            "WebSiteDomain",
+            "WPUserEmail",
+            "WPUserName",
+            "WPPassword"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Amazon RDS Configuration"
+          },
+          "Parameters": [
+            "RDSInstanceType",
+            "MySQLPassword",
+            "MulitiAZDatabase",
+            "DBAllocatedStorage"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "VPCID": {
+          "default": "Which VPC should this be deployed to?"
+        }
+      }
+    }
+  },
   "Mappings": {
     "MPAmimotov4": {
-      "eu-west-1": {
-        "AMI": "ami-3b289a48"
-      },
-      "ap-southeast-1": {
-        "AMI": "ami-39945d5a"
-      },
-      "ap-southeast-2": {
-        "AMI": "ami-9f93b4fc"
-      },
       "eu-central-1": {
-        "AMI": "ami-181a0074"
-      },
-      "ap-northeast-2": {
-        "AMI": "ami-4c2be522"
-      },
-      "ap-northeast-1": {
-        "AMI": "ami-d42c2dba"
+        "AMI": "ami-1e40b471"
       },
       "us-east-1": {
-        "AMI": "ami-0c417066"
-      },
-      "sa-east-1": {
-        "AMI": "ami-da0083b6"
-      },
-      "us-west-1": {
-        "AMI": "ami-efafde8f"
+        "AMI": "ami-346afe23"
       },
       "us-west-2": {
-        "AMI": "ami-2835d648"
+        "AMI": "ami-5279b632"
       }
     }
   },
@@ -287,7 +328,7 @@
                 },
                 "\n",
                 "yum install -y nfs-utils\n",
-                "mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
+                "mount -t nfs4 -o nfsvers=4.1,nosharecache,context $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
                 {
                   "Ref": "EFSFileSystem"
                 },
