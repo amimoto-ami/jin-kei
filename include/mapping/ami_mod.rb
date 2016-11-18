@@ -1,14 +1,15 @@
 MPAmimotov4(
   {
-  "eu-west-1"=>{"AMI"=>"ami-30289a43"},
-  "ap-southeast-1"=>{"AMI"=>"ami-7da9601e"},
-  "ap-southeast-2"=>{"AMI"=>"ami-5295b231"},
-  "eu-central-1"=>{"AMI"=>"ami-5a647e36"},
-  "ap-northeast-2"=>{"AMI"=>"ami-492de327"},
-  "ap-northeast-1"=>{"AMI"=>"ami-1e2e2f70"},
-  "us-east-1"=>{"AMI"=>"ami-58417032"},
-  "sa-east-1"=>{"AMI"=>"ami-9e7dfef2"},
-  "us-west-1"=>{"AMI"=>"ami-7aafde1a"},
-  "us-west-2"=>{"AMI"=>"ami-5d35d63d"},
+  "ap-south-1"=>{"AMI"=>"ami-8dc8a2e2"},
+  "eu-west-1"=>{"AMI"=>"ami-60db5413"},
+  "ap-northeast-2"=>{"AMI"=>"ami-1117df7f"},
+  "ap-northeast-1"=>{"AMI"=>"ami-992836f7"},
+  "sa-east-1"=>{"AMI"=>"ami-c20c82ae"},
+  "ap-southeast-1"=>{"AMI"=>"ami-9d0edafe"},
+  "ap-southeast-2"=>{"AMI"=>"ami-cb260ba8"},
+  "eu-central-1"=>{"AMI"=>"ami-c5d635aa"},
+  "us-east-1"=>{"AMI"=>"ami-20051d4a"},
+  "us-west-1"=>{"AMI"=>"ami-d7cab5b7"},
+  "us-west-2"=>{"AMI"=>"ami-fa38c99a"},
  }
 )
