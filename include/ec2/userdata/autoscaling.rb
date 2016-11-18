@@ -17,7 +17,7 @@
 
 		## Setup NFSv4 for EFS
 		"yum install -y nfs-utils\n",
-		"mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
+		"mount -t nfs4 -o nfsvers=4.1,nosharecache,context $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
 		_{ Ref "EFSFileSystem" },
 		".efs.",
 		_{
