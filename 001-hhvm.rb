@@ -1,10 +1,14 @@
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
-  WordPress powered by JINKEI (Simple Stack HHVM) Version1.3.0
+  WordPress powered by JINKEI (Simple Stack HHVM) Version1.4.0
   This is a Powerful & Scalable AMIMOTO Stack deployed by CloudFormation.
   Added an RDS Database for scalability.
   Services used are VPC,EC2,EIP,CloudFront,S3, & RDS(MariaDB).
 EOS
+
+Metadata do
+  _include "metadata/simplestack_rds.rb"
+end
 
 Mappings do
   _include "include/mapping/ami_hhvm.rb"
