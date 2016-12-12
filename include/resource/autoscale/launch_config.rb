@@ -53,7 +53,12 @@ ASLaunchConfig do
 						## Change web document root dir
 						"tmp_json=`mktemp`\n",
 						"amimoto_json='/opt/local/amimoto.json'\n",
-						"json='{\"wordpress\":{\"document_root\":\"/var/www/html\"}}'\n",
+						"json='{",
+                		"\"wordpress\":{\"document_root\":\"/var/www/html\",\"jinkei_cf\": \"true\"},",
+						"\"nginx\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+						"\"php\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+						"\"run_list\" : [ \"recipe[amimoto]\" ]",
+						"}'\n",
 						"[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
 						"if [ -f $amimoto_json ]; then\n",
 						"  hash jq || /usr/bin/yum install -y jq\n",
@@ -62,7 +67,9 @@ ASLaunchConfig do
 						"  echo $json > $tmp_json\n",
 						"fi\n",
 						"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
-
+						## DIRオーナ変更
+						"chown -R ec2-user:nginx /var/www/html\n",
+						"echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
 						## Waite for Download WordPress
 						"until [ `find /var/www/html -name local-salt.php` ]\n",
 						"do\n",
