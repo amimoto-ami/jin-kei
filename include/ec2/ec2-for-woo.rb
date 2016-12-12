@@ -4,17 +4,6 @@ EC2 do
     AWS__CloudFormation__Init do
       config do
         files do
-          _path("/opt/aws/cf_option.json") do
-              content '{
-                "option" : {
-                  "cloudfront" : "true",
-                  "woo": "true"
-                }
-              }'
-            mode "00644"
-            owner "root"
-            group "root"
-          end
 		  _include "include/ec2/metadata-for-rds.rb"
         end
       end
