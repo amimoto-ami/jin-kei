@@ -1,5 +1,4 @@
 Resources do
-  _include "include/ec2/ec2-with-rds.rb"
   _include "include/rds/rds.rb"
   _include "include/resource/efs/efs.rb"
   _include "include/resource/efs/efs_mount.rb"

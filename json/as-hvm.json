@@ -233,12 +233,6 @@
         "AWS::CloudFormation::Init": {
           "config": {
             "files": {
-              "/opt/aws/cf_option.json": {
-                "content": "{\n                \"option\" : {\n                  \"cloudfront\" : \"true\"\n                }\n              }",
-                "mode": "00644",
-                "owner": "root",
-                "group": "root"
-              },
               "/opt/aws/cloud_formation.json": {
                 "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  },\n\t  \"s3_conf\": {\n\t\t  \"region\": \"{{s3region}}\",\n\t\t  \"bucket\": \"{{s3bucket}}\",\n\t\t  \"url\": \"{{s3url}}\",\n\t\t  \"storage\": \"STANDARD\"\n\t  }\n\t}",
                 "context": {
@@ -346,7 +340,12 @@
                 "fi\n",
                 "tmp_json=`mktemp`\n",
                 "amimoto_json='/opt/local/amimoto.json'\n",
-                "json='{\"wordpress\":{\"document_root\":\"/var/www/html\"}}'\n",
+                "json='{",
+                "\"wordpress\":{\"document_root\":\"/var/www/html\",\"jinkei_cf\": \"true\"},",
+                "\"nginx\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+                "\"php\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+                "\"run_list\" : [ \"recipe[amimoto]\" ]",
+                "}'\n",
                 "[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
                 "if [ -f $amimoto_json ]; then\n",
                 "  hash jq || /usr/bin/yum install -y jq\n",
@@ -355,6 +354,8 @@
                 "  echo $json > $tmp_json\n",
                 "fi\n",
                 "[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
+                "chown -R ec2-user:nginx /var/www/html\n",
+                "echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
                 "until [ `find /var/www/html -name local-salt.php` ]\n",
                 "do\n",
                 "sleep 5\n",
@@ -601,6 +602,44 @@
     },
     "ASLaunchConfig": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "config": {
+            "files": {
+              "/opt/aws/cloud_formation.json": {
+                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  },\n\t  \"s3_conf\": {\n\t\t  \"region\": \"{{s3region}}\",\n\t\t  \"bucket\": \"{{s3bucket}}\",\n\t\t  \"url\": \"{{s3url}}\",\n\t\t  \"storage\": \"STANDARD\"\n\t  }\n\t}",
+                "context": {
+                  "endpoint": {
+                    "Fn::GetAtt": [
+                      "RDS",
+                      "Endpoint.Address"
+                    ]
+                  },
+                  "password": {
+                    "Ref": "MySQLPassword"
+                  },
+                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)",
+                  "s3bucket": {
+                    "Ref": "S3Media"
+                  },
+                  "s3url": {
+                    "Fn::GetAtt": [
+                      "S3Media",
+                      "WebsiteURL"
+                    ]
+                  },
+                  "s3region": {
+                    "Ref": "AWS::Region"
+                  }
+                },
+                "mode": "00644",
+                "owner": "root",
+                "group": "root"
+              }
+            }
+          }
+        }
+      },
       "Properties": {
         "IamInstanceProfile": {
           "Ref": "IAMForEC2"
@@ -656,7 +695,12 @@
                 ".amazonaws.com:/ /var/www/html\n",
                 "tmp_json=`mktemp`\n",
                 "amimoto_json='/opt/local/amimoto.json'\n",
-                "json='{\"wordpress\":{\"document_root\":\"/var/www/html\"}}'\n",
+                "json='{",
+                "\"wordpress\":{\"document_root\":\"/var/www/html\",\"jinkei_cf\": \"true\"},",
+                "\"nginx\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+                "\"php\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+                "\"run_list\" : [ \"recipe[amimoto]\" ]",
+                "}'\n",
                 "[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
                 "if [ -f $amimoto_json ]; then\n",
                 "  hash jq || /usr/bin/yum install -y jq\n",
@@ -665,6 +709,8 @@
                 "  echo $json > $tmp_json\n",
                 "fi\n",
                 "[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
+                "chown -R ec2-user:nginx /var/www/html\n",
+                "echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
                 "until [ `find /var/www/html -name local-salt.php` ]\n",
                 "do\n",
                 "sleep 5\n",
@@ -778,9 +824,9 @@
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": [
           {
-            "Name": "InstanceId",
+            "Name": "AutoScalingGroupName",
             "Value": {
-              "Ref": "EC2"
+              "Ref": "ASGroup"
             }
           }
         ]
@@ -804,9 +850,9 @@
         "ComparisonOperator": "LessThanThreshold",
         "Dimensions": [
           {
-            "Name": "InstanceId",
+            "Name": "AutoScalingGroupName",
             "Value": {
-              "Ref": "EC2"
+              "Ref": "ASGroup"
             }
           }
         ]
@@ -1086,11 +1132,6 @@
             "LoadBalancerPort": "80",
             "Protocol": "HTTP",
             "InstanceProtocol": "HTTP"
-          }
-        ],
-        "Instances": [
-          {
-            "Ref": "EC2"
           }
         ],
         "SecurityGroups": [
@@ -1492,12 +1533,6 @@
     }
   },
   "Outputs": {
-    "EC2InstanceId": {
-      "Description": "Instance ID required for first login. Please make a note of this value.",
-      "Value": {
-        "Ref": "EC2"
-      }
-    },
     "WebSiteURL": {
       "Description": "WordPress Site URL (Please wait a few minutes for the installation to complete before accessing.)",
       "Value": {
