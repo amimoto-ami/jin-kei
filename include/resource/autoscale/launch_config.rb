@@ -50,6 +50,7 @@ ASLaunchConfig do
 						  Ref "AWS::Region"
 						},
 						"\n",
+						"yum update -y\n",
 						## Setup NFSv4 for EFS
 						"yum install -y nfs-utils\n",
 						"mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
@@ -111,7 +112,11 @@ ASLaunchConfig do
 						"--path=/var/www/html --allow-root ",
 						" --title='Welcome to the AMIMOTO'",
 						"\n",
-						"fi\n"
+						"fi\n",
+						#Install CloudWatch Logs Agent
+						"yum install -y awslogs\n",
+						"service awslogs start\n",
+						"chkconfig awslogs on"
 					]
 				]
 			end
