@@ -22,11 +22,13 @@ ELB do
         InstanceProtocol  "HTTP"
       }
     ]
-    Instances [
-      _{
-        Ref "EC2"
-      }
-    ]
+    if $Stack_Type != 'autoscale' then
+        Instances [
+          _{
+            Ref "EC2"
+          }
+        ]
+    end
     SecurityGroups [
       _{
         Ref "SecurityGroupInternal"

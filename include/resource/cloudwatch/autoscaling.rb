@@ -16,9 +16,9 @@ ASHighCPUAlearm do
 		ComparisonOperator "GreaterThanThreshold"
 		Dimensions [
 			_{
-				Name "InstanceId"
+				Name "AutoScalingGroupName"
 				Value do
-					Ref "EC2"
+					Ref "ASGroup"
 				end
 			}
 		]
@@ -43,9 +43,9 @@ ASLowCPUAlearm do
 		ComparisonOperator "LessThanThreshold"
 		Dimensions [
 			_{
-				Name "InstanceId"
+				Name "AutoScalingGroupName"
 				Value do
-					Ref "EC2"
+					Ref "ASGroup"
 				end
 			}
 		]

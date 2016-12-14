@@ -12,4 +12,3 @@ EC2WaitCondition do
     Timeout "1800"
   end
 end
-
