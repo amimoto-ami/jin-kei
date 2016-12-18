@@ -57,8 +57,8 @@ end
 _path("/etc/cfn/hooks.d/cfn-auto-reloader.conf") do
   content '[cfn-auto-reloader-hook]
 triggers=post.update
-path=Resources.EC2.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -s {{stackArn}} -r EC2 --region {{region}}
+path=Resources.{{resources}}.Metadata.AWS::CloudFormation::Init
+action=/opt/aws/bin/cfn-init -s {{stackArn}} -r {{resources}} --region {{region}}
 runas=root'
 	context do
 		stackArn do
@@ -66,6 +66,13 @@ runas=root'
 		end
 		region do
 			Ref "AWS::Region"
-		end
+    end
+    resources do
+      if $Stack_Type == 'autoscale' then
+        "ASLaunchConfig"
+      else
+        "EC2"
+      end
+    end
   end
 end
