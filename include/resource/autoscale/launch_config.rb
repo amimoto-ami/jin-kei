@@ -40,6 +40,12 @@ ASLaunchConfig do
 					"",
 					[
 						"#!/bin/bash\n",
+            "yum update -y\n",
+
+						"# Get the latest CloudFormation package\n",
+						"yum install -y aws-cfn-bootstrap\n",
+
+            "# Start cfn-init\n",
 						"/opt/aws/bin/cfn-init -s ",
 						_{
 						  Ref "AWS::StackName"
@@ -49,8 +55,9 @@ ASLaunchConfig do
 						_{
 						  Ref "AWS::Region"
 						},
+            " || error_exit 'Failed to run cfn-init'\n",
 						"\n",
-						"yum update -y\n",
+
 						## Setup NFSv4 for EFS
 						"yum install -y nfs-utils\n",
 						"mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
@@ -60,6 +67,7 @@ ASLaunchConfig do
 						  Ref "AWS::Region"
 						},
 						".amazonaws.com:/ /var/www/html\n",
+
 						## Install WP_CLI
 						"WP_CLI=/usr/local/bin/wp\n",
 						"cd /usr/local/bin\n",
@@ -68,6 +76,7 @@ ASLaunchConfig do
 						  "mv -f wp-cli.phar /usr/local/bin/wp\n",
 						  "chmod +x /usr/local/bin/wp\n",
 						"fi\n",
+
 						## Change web document root dir
 						"tmp_json=`mktemp`\n",
 						"amimoto_json='/opt/local/amimoto.json'\n",
@@ -85,15 +94,18 @@ ASLaunchConfig do
 						"  echo $json > $tmp_json\n",
 						"fi\n",
 						"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
+
 						## DIRオーナ変更
 						"chown -R ec2-user:nginx /var/www/html\n",
 						"echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
+
 						## Waite for Download WordPress
 						"until [ `find /var/www/html -name local-salt.php` ]\n",
 						"do\n",
 						"sleep 5\n",
 						"done\n",
 						"sleep 5\n",
+
 						## Install WordPres
 						"if ! $(/usr/local/bin/wp core is-installed --allow-root); then\n",
 						"/usr/local/bin/wp core install ",
@@ -113,10 +125,15 @@ ASLaunchConfig do
 						" --title='Welcome to the AMIMOTO'",
 						"\n",
 						"fi\n",
+
 						#Install CloudWatch Logs Agent
 						"yum install -y awslogs\n",
 						"service awslogs start\n",
-						"chkconfig awslogs on"
+						"chkconfig awslogs on",
+
+            "# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
+            "/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n"
+
 					]
 				]
 			end
