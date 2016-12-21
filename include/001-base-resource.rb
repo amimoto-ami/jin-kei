@@ -4,6 +4,11 @@ if $Stack_Type != 'autoscale' then
 end
 _include "include/security_group.rb"
 _include "include/elb.rb"
-_include 'include/iam/for_stack_001.rb'
+
+if $Stack_Type == 'autoscale' then
+  _include 'include/iam/instance_profile.rb'
+else
+  _include 'include/iam/for_stack_001.rb'
+end
 _include "include/cloudfront/cf.rb"
 _include "include/s3/s3-media.rb"
