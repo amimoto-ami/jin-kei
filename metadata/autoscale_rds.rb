@@ -25,7 +25,12 @@ AWS__CloudFormation__Interface do
                 default "Amazon RDS Configuration"
             end
             Parameters "RDSInstanceType", "MySQLPassword", "MulitiAZDatabase", "DBAllocatedStorage"
-        },
+        },_{
+            Label do
+                default "Logs configuration"
+            end
+            Parameters "LogRetentionInDays"
+        }
     ]
     ParameterLabels do
         VPCID do

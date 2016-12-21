@@ -10,5 +10,7 @@ Resources do
   _include "include/resource/cloudwatch/autoscaling.rb"
   _include "include/resource/sns/autoscaling.rb"
 
+  _include "include/resource/cloudwatch/logs.rb"
+
   _include "include/001-base-resource.rb"
 end
