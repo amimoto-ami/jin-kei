@@ -14,14 +14,29 @@ ELB do
       Timeout            10
       UnhealthyThreshold 2
     end
-    Listeners [
-      _{
+    if $Stack_Type == 'autoscale' then
+      Listeners [
+        _{
+          InstancePort      80
+          LoadBalancerPort  80
+          Protocol          "HTTP"
+          InstanceProtocol  "HTTP"
+        },
+        _{
+          InstancePort      22
+          LoadBalancerPort  22
+          Protocol          "TCP"
+          InstanceProtocol  "TCP"
+        }
+      ]
+    else
+      Listeners [_{
         InstancePort      80
         LoadBalancerPort  80
         Protocol          "HTTP"
         InstanceProtocol  "HTTP"
-      }
-    ]
+      }]
+    end
     if $Stack_Type != 'autoscale' then
         Instances [
           _{

@@ -2,14 +2,31 @@ SecurityGroupPublic do
   Type "AWS::EC2::SecurityGroup"
   Properties do
     GroupDescription "SG for ELB"
-    SecurityGroupIngress [
-      _{
+    if $Stack_Type != 'autoscale' then
+      SecurityGroupIngress [_{
         IpProtocol "tcp"
         FromPort   80
         ToPort     80
         CidrIp     "0.0.0.0/0"
-      }
-    ]
+      }]
+    else
+      SecurityGroupIngress [
+        _{
+          IpProtocol "tcp"
+          FromPort   80
+          ToPort     80
+          CidrIp     "0.0.0.0/0"
+        },
+        _{
+          IpProtocol "tcp"
+          FromPort   22
+          ToPort     22
+          CidrIp do
+            Ref "SSHLocation"
+          end
+        }
+      ]
+    end
     Tags [
       _{
         Key "Application"
