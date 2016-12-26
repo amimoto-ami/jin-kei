@@ -40,12 +40,12 @@ ASLaunchConfig do
 					"",
 					[
 						"#!/bin/bash\n",
-            "yum update -y\n",
+                        "yum update -y\n",
 
 						"# Get the latest CloudFormation package\n",
 						"yum install -y aws-cfn-bootstrap\n",
 
-            "# Start cfn-init\n",
+                        "# Start cfn-init\n",
 						"/opt/aws/bin/cfn-init -s ",
 						_{
 						  Ref "AWS::StackName"
@@ -55,7 +55,7 @@ ASLaunchConfig do
 						_{
 						  Ref "AWS::Region"
 						},
-            " || error_exit 'Failed to run cfn-init'\n",
+                        " || error_exit 'Failed to run cfn-init'\n",
 						"\n",
 
 						## Setup NFSv4 for EFS
@@ -96,6 +96,7 @@ ASLaunchConfig do
 						"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
 
 						## DIRオーナ変更
+						## @TODO:ここでchown実行できているか確認（FTP情報要求された時がある）
 						"chown -R ec2-user:nginx /var/www/html\n",
 						"echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
 
@@ -126,13 +127,20 @@ ASLaunchConfig do
 						"\n",
 						"fi\n",
 
-						#Install CloudWatch Logs Agent
-						"yum install -y awslogs\n",
-						"service awslogs start\n",
-						"chkconfig awslogs on",
+                        # Get the CloudWatch Logs agent
+                        "wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py\n",
 
-            "# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
-            "/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n"
+                        # Install the CloudWatch Logs agent
+                        "python awslogs-agent-setup.py -n -r ",
+                        _{ Ref "AWS::Region" },
+                        " -c /tmp/cwlogs/logs.conf || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
+
+						# Start the CloudWatch Logs agent
+						"sudo service awslogs start || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
+						"chkconfig awslogs on\n",
+
+                        "# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
+                        "/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n"
 
 					]
 				]
