@@ -76,3 +76,53 @@ runas=root'
     end
   end
 end
+
+if $Stack_Type == 'autoscale' then
+    _path("/tmp/cwlogs/logs.conf") do
+        content '[general]
+state_file = /var/awslogs/agent-state
+
+[/var/log/messages]
+datetime_format = %b %d %H:%M:%S
+file = /var/log/messages
+buffer_duration = 5000
+log_stream_name = /var/log/messages
+log_group_name = {{webServerLogGroup}}
+
+[/var/log/php-fpm/www-error.log]
+datetime_format = %d/%b/%Y:%H:%M:%S %z
+file = /var/log/php-fpm/www-error.log
+buffer_duration = 5000
+log_stream_name = /var/log/php-fpm/www-error.log
+log_group_name = {{webServerLogGroup}}
+
+[/var/log/nginx/{instance_id}.backend.access.log]
+datetime_format = %d/%b/%Y:%H:%M:%S %z
+file = /var/log/nginx/*.backend.access.log
+buffer_duration = 5000
+log_stream_name = /var/log/nginx/{instance_id}.backend.access.log
+log_group_name = {{webServerLogGroup}}
+
+[/var/log/nginx/{instance_id}.access.log]
+datetime_format = %d/%b/%Y:%H:%M:%S %z
+file = /var/log/nginx/*.access.log
+buffer_duration = 5000
+log_stream_name = /var/log/nginx/{instance_id}.access.log
+log_group_name = {{webServerLogGroup}}
+
+[/var/log/nginx/{instance_id}.error.log]
+datetime_format = %d/%b/%Y:%H:%M:%S %z
+file = /var/log/nginx/*.error.log
+buffer_duration = 5000
+log_stream_name = /var/log/nginx/{instance_id}.error.log
+log_group_name = {{webServerLogGroup}}'
+        context do
+            webServerLogGroup do
+                Ref "CWLogs"
+            end
+        end
+        mode "000400"
+        owner "root"
+        group "root"
+    end
+end

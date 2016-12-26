@@ -22,6 +22,7 @@ Parameters do
   _include "include/parameters/domain.rb"
   _include "include/parameters/wordpress.rb"
   _include "include/parameters/autoscale.rb"
+  _include "include/parameters/cloudwatchlogs.rb"
 end
 
 _include "include/resource/resource_efs.rb"
