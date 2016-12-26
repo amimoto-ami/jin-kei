@@ -3,7 +3,7 @@ Outputs do
     _include "outputs/ec2.rb"
   else
     ELBDomain do
-        Description "Instance ID required for first login. Please make a note of this value."
+        Description "ssh login address"
         Value do
             Fn__GetAtt "ELB", "DNSName"
         end
