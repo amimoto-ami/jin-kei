@@ -4,6 +4,14 @@ EC2 do
   Metadata do
     AWS__CloudFormation__Init do
       config do
+        services do
+          sysvinit do
+            mysql do
+                enabled false
+                ensureRunning false
+            end
+          end
+        end
         files do
 		  _include "include/ec2/metadata-for-rds.rb"
         end
