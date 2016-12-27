@@ -94,6 +94,7 @@ datetime_format = %d/%b/%Y:%H:%M:%S %z
 file = /var/log/php-fpm/www-error.log
 buffer_duration = 5000
 log_stream_name = /var/log/php-fpm/www-error.log
+multi_line_start_pattern = {datetime_format}
 log_group_name = {{webServerLogGroup}}
 
 [/var/log/nginx/{instance_id}.backend.access.log]
