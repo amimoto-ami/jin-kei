@@ -9,7 +9,8 @@ IAMPolicyForCloudFront do
           ## Invalidationの参照と登録のみを許可
           Effect "Allow"
           Action [
-            "cloudfront:*Invalidation*"
+            "cloudfront:*Invalidation*",
+            "cloudfront:*getDistribution*"
           ]
           Resource "*"
         }
