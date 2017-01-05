@@ -135,6 +135,13 @@ ASLaunchConfig do
                         _{ Ref "AWS::Region" },
                         " -c /tmp/cwlogs/logs.conf || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
 
+                        # Install EC2 System Manager agent
+                        "cd /tmp\n",
+                        "curl https://amazon-ssm-",
+                        _{ Ref "AWS::Region" },
+                        ".s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm\n",
+                        "yum install -y amazon-ssm-agent.rpm\n",
+
 						# Start the CloudWatch Logs agent
 						"sudo service awslogs start || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
 						"chkconfig awslogs on\n",
