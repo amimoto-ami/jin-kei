@@ -39,9 +39,12 @@
           },
           "Parameters": [
             "WebSiteDomain",
-            "WPUserEmail",
             "WPUserName",
-            "WPPassword"
+            "WPPassword",
+            "WPUserEmail",
+            "WPCoreVersion",
+            "WPIsMultiSite",
+            "IsMobileDetect"
           ]
         },
         {
@@ -54,11 +57,52 @@
             "MulitiAZDatabase",
             "DBAllocatedStorage"
           ]
+        },
+        {
+          "Label": {
+            "default": "Extra Configuration"
+          },
+          "Parameters": [
+            "PHPmyAdmin",
+            "PHPMemoryLimit",
+            "NginxClientMaxBodySite",
+            "LogRetentionInDays"
+          ]
         }
       ],
       "ParameterLabels": {
-        "VPCID": {
-          "default": "Which VPC should this be deployed to?"
+        "LogRetentionInDays": {
+          "default": "Log retention days (optional)"
+        },
+        "WebSiteDomain": {
+          "default": "website domain"
+        },
+        "WPUserEmail": {
+          "default": "Login Email address"
+        },
+        "WPUserName": {
+          "default": "Login user name"
+        },
+        "WPPassword": {
+          "default": "Login user password"
+        },
+        "WPCoreVersion": {
+          "default": "WordPress version (optional)"
+        },
+        "WPIsMultiSite": {
+          "default": "Multisite setting (optional)"
+        },
+        "IsMobileDetect": {
+          "default": "is_wp_mobile() support (optional)"
+        },
+        "PHPmyAdmin": {
+          "default": "phpMyAdmin setting (optional)"
+        },
+        "NginxClientMaxBodySite": {
+          "default": "Nginx client_max_body_size setting (optional)"
+        },
+        "PHPMemoryLimit": {
+          "default": "php memory limit setting (optional)"
         }
       }
     }
@@ -73,6 +117,20 @@
       },
       "us-west-2": {
         "AMI": "ami-5279b632"
+      }
+    },
+    "AMIMOTOConfig": {
+      "mobile-detect": {
+        "enabled": "true",
+        "disabled": "false"
+      },
+      "wp-multisite": {
+        "enabled": "true",
+        "disabled": "false"
+      },
+      "php-myadmin": {
+        "enabled": "true",
+        "disabled": "false"
       }
     }
   },
@@ -212,202 +270,79 @@
       "Description": "User Name for the WordPress User",
       "Type": "String"
     },
+    "WPCoreVersion": {
+      "Description": "WordPress Version",
+      "Type": "String",
+      "Default": "latest",
+      "AllowedValues": [
+        "4.5.4",
+        "4.6.1",
+        "latest"
+      ],
+      "ConstraintDescription": "Must be a valid WordPress Version"
+    },
+    "WPIsMultiSite": {
+      "Description": "Nginx config exchange for Multisite WordPress",
+      "Type": "String",
+      "Default": "disabled",
+      "AllowedValues": [
+        "disabled",
+        "enabled"
+      ],
+      "ConstraintDescription": "Must be a valid configuration"
+    },
+    "IsMobileDetect": {
+      "Description": "If you use `is_wp_mobile()` function, please enable it.",
+      "Type": "String",
+      "Default": "disabled",
+      "AllowedValues": [
+        "disabled",
+        "enabled"
+      ],
+      "ConstraintDescription": "Must be a valid configuration"
+    },
+    "PHPmyAdmin": {
+      "Description": "Enable phpMyAdmin",
+      "Type": "String",
+      "Default": "disabled",
+      "AllowedValues": [
+        "disabled",
+        "enabled"
+      ],
+      "ConstraintDescription": "Must be a valid configuration"
+    },
+    "NginxClientMaxBodySite": {
+      "Description": "Nginx Client max body size (MB)",
+      "Type": "Number",
+      "Default": "4"
+    },
+    "PHPMemoryLimit": {
+      "Description": "PHP memory limit (MB)",
+      "Type": "Number",
+      "Default": "128"
+    },
     "AutoScalingMaxSize": {
       "Description": "Max instance number of AutoScaling group",
-      "Type": "Number"
+      "Type": "Number",
+      "Default": "2"
     },
     "AutoScalingMinSize": {
       "Description": "Min instance number of AutoScaling group",
-      "Type": "Number"
+      "Type": "Number",
+      "Default": "2"
     },
     "AutoScalingDesiredCapacity": {
       "Description": "Desired capacity of AutoScaling group",
-      "Type": "Number"
+      "Type": "Number",
+      "Default": "2"
+    },
+    "LogRetentionInDays": {
+      "Description": "Log retention days on CloudWatch Logs",
+      "Type": "Number",
+      "Default": "7"
     }
   },
   "Resources": {
-    "EC2": {
-      "Type": "AWS::EC2::Instance",
-      "DependsOn": "AttachGatewayToVPC",
-      "Metadata": {
-        "AWS::CloudFormation::Init": {
-          "config": {
-            "files": {
-              "/opt/aws/cloud_formation.json": {
-                "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  },\n\t  \"s3_conf\": {\n\t\t  \"region\": \"{{s3region}}\",\n\t\t  \"bucket\": \"{{s3bucket}}\",\n\t\t  \"url\": \"{{s3url}}\",\n\t\t  \"storage\": \"STANDARD\"\n\t  }\n\t}",
-                "context": {
-                  "endpoint": {
-                    "Fn::GetAtt": [
-                      "RDS",
-                      "Endpoint.Address"
-                    ]
-                  },
-                  "password": {
-                    "Ref": "MySQLPassword"
-                  },
-                  "serverid": "dummy(value_will_update_by_AmimotoFrontLC)",
-                  "s3bucket": {
-                    "Ref": "S3Media"
-                  },
-                  "s3url": {
-                    "Fn::GetAtt": [
-                      "S3Media",
-                      "WebsiteURL"
-                    ]
-                  },
-                  "s3region": {
-                    "Ref": "AWS::Region"
-                  }
-                },
-                "mode": "00644",
-                "owner": "root",
-                "group": "root"
-              }
-            }
-          }
-        }
-      },
-      "Properties": {
-        "AvailabilityZone": {
-          "Ref": "AvailabilityZone"
-        },
-        "DisableApiTermination": "false",
-        "EbsOptimized": "false",
-        "ImageId": {
-          "Fn::FindInMap": [
-            "MPAmimotov4",
-            {
-              "Ref": "AWS::Region"
-            },
-            "AMI"
-          ]
-        },
-        "InstanceInitiatedShutdownBehavior": "stop",
-        "InstanceType": {
-          "Ref": "InstanceType"
-        },
-        "KeyName": {
-          "Ref": "KeyName"
-        },
-        "Monitoring": "false",
-        "SubnetId": {
-          "Ref": "PublicSubnet"
-        },
-        "Tenancy": "default",
-        "SecurityGroupIds": [
-          {
-            "Ref": "SecurityGroupInstance"
-          },
-          {
-            "Ref": "SecurityGroupInternal"
-          }
-        ],
-        "IamInstanceProfile": {
-          "Ref": "IAMForEC2"
-        },
-        "UserData": {
-          "Fn::Base64": {
-            "Fn::Join": [
-              "",
-              [
-                "#!/bin/bash\n",
-                "/opt/aws/bin/cfn-init -s ",
-                {
-                  "Ref": "AWS::StackName"
-                },
-                " -r EC2 ",
-                " --region ",
-                {
-                  "Ref": "AWS::Region"
-                },
-                "\n",
-                "yum install -y nfs-utils\n",
-                "mount -t nfs4 -o nfsvers=4.1,nosharecache,context $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
-                {
-                  "Ref": "EFSFileSystem"
-                },
-                ".efs.",
-                {
-                  "Ref": "AWS::Region"
-                },
-                ".amazonaws.com:/ /var/www/html\n",
-                "WP_CLI=/usr/local/bin/wp\n",
-                "cd /usr/local/bin\n",
-                "/usr/bin/curl -fO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar\n",
-                "if [ -f wp-cli.phar ] ; then\n",
-                "mv -f wp-cli.phar /usr/local/bin/wp\n",
-                "chmod +x /usr/local/bin/wp\n",
-                "fi\n",
-                "tmp_json=`mktemp`\n",
-                "amimoto_json='/opt/local/amimoto.json'\n",
-                "json='{",
-                "\"wordpress\":{\"document_root\":\"/var/www/html\",\"jinkei_cf\": \"true\"},",
-                "\"nginx\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
-                "\"php\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
-                "\"run_list\" : [ \"recipe[amimoto]\" ]",
-                "}'\n",
-                "[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
-                "if [ -f $amimoto_json ]; then\n",
-                "  hash jq || /usr/bin/yum install -y jq\n",
-                "  /usr/bin/jq -s '.[0] * .[1]' $amimoto_json <(echo $json) > $tmp_json\n",
-                "else\n",
-                "  echo $json > $tmp_json\n",
-                "fi\n",
-                "[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
-                "chown -R ec2-user:nginx /var/www/html\n",
-                "echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
-                "until [ `find /var/www/html -name local-salt.php` ]\n",
-                "do\n",
-                "sleep 5\n",
-                "done\n",
-                "sleep 5\n",
-                "/usr/local/bin/wp core install ",
-                "--url=",
-                {
-                  "Ref": "WebSiteDomain"
-                },
-                " ",
-                "--admin_name=",
-                {
-                  "Ref": "WPUserName"
-                },
-                " ",
-                "--admin_email=",
-                {
-                  "Ref": "WPUserEmail"
-                },
-                " ",
-                "--admin_password=",
-                {
-                  "Ref": "WPPassword"
-                },
-                " ",
-                "--path=/var/www/html --allow-root ",
-                " --title='Welcome to the AMIMOTO'",
-                "\n",
-                "/opt/aws/bin/cfn-signal -e $? -r \"WordPress setup complete\" '",
-                {
-                  "Ref": "EC2WaitHandle"
-                },
-                "'\n"
-              ]
-            ]
-          }
-        },
-        "Tags": [
-          {
-            "Key": "Application",
-            "Value": {
-              "Ref": "AWS::StackName"
-            }
-          },
-          {
-            "Key": "HasRDS",
-            "Value": "true"
-          }
-        ]
-      }
-    },
     "RDSSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
@@ -635,6 +570,44 @@
                 "mode": "00644",
                 "owner": "root",
                 "group": "root"
+              },
+              "/etc/cfn/cfn-hup.conf": {
+                "content": "[main]\nstack={{stackArn}}\nregion={{region}}",
+                "mode": "000400",
+                "owner": "root",
+                "group": "root",
+                "context": {
+                  "stackArn": {
+                    "Ref": "AWS::StackId"
+                  },
+                  "region": {
+                    "Ref": "AWS::Region"
+                  }
+                }
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+                "content": "[cfn-auto-reloader-hook]\ntriggers=post.update\npath=Resources.{{resources}}.Metadata.AWS::CloudFormation::Init\naction=/opt/aws/bin/cfn-init -s {{stackArn}} -r {{resources}} --region {{region}}\nrunas=root",
+                "context": {
+                  "stackArn": {
+                    "Ref": "AWS::StackId"
+                  },
+                  "region": {
+                    "Ref": "AWS::Region"
+                  },
+                  "resources": {
+                  }
+                }
+              },
+              "/tmp/cwlogs/logs.conf": {
+                "content": "[general]\nstate_file = /var/awslogs/agent-state\n\n[/var/log/messages]\ndatetime_format = %b %d %H:%M:%S\nfile = /var/log/messages\nbuffer_duration = 5000\nlog_stream_name = /var/log/messages\nlog_group_name = {{webServerLogGroup}}\n\n[/var/log/php-fpm/www-error.log]\ndatetime_format = %d/%b/%Y:%H:%M:%S %z\nfile = /var/log/php-fpm/www-error.log\nbuffer_duration = 5000\nlog_stream_name = /var/log/php-fpm/www-error.log\nmulti_line_start_pattern = {datetime_format}\nlog_group_name = {{webServerLogGroup}}\n\n[/var/log/nginx/{instance_id}.backend.access.log]\ndatetime_format = %d/%b/%Y:%H:%M:%S %z\nfile = /var/log/nginx/*.backend.access.log\nbuffer_duration = 5000\nlog_stream_name = /var/log/nginx/{instance_id}.backend.access.log\nlog_group_name = {{webServerLogGroup}}\n\n[/var/log/nginx/{instance_id}.access.log]\ndatetime_format = %d/%b/%Y:%H:%M:%S %z\nfile = /var/log/nginx/*.access.log\nbuffer_duration = 5000\nlog_stream_name = /var/log/nginx/{instance_id}.access.log\nlog_group_name = {{webServerLogGroup}}\n\n[/var/log/nginx/{instance_id}.error.log]\ndatetime_format = %d/%b/%Y:%H:%M:%S %z\nfile = /var/log/nginx/*.error.log\nbuffer_duration = 5000\nlog_stream_name = /var/log/nginx/{instance_id}.error.log\nlog_group_name = {{webServerLogGroup}}",
+                "context": {
+                  "webServerLogGroup": {
+                    "Ref": "CWLogs"
+                  }
+                },
+                "mode": "000400",
+                "owner": "root",
+                "group": "root"
               }
             }
           }
@@ -673,15 +646,20 @@
               "",
               [
                 "#!/bin/bash\n",
+                "yum update -y\n",
+                "# Get the latest CloudFormation package\n",
+                "yum install -y aws-cfn-bootstrap\n",
+                "# Start cfn-init\n",
                 "/opt/aws/bin/cfn-init -s ",
                 {
                   "Ref": "AWS::StackName"
                 },
-                " -r EC2 ",
+                " -r ASLaunchConfig ",
                 " --region ",
                 {
                   "Ref": "AWS::Region"
                 },
+                " || error_exit 'Failed to run cfn-init'\n",
                 "\n",
                 "yum install -y nfs-utils\n",
                 "mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
@@ -693,12 +671,77 @@
                   "Ref": "AWS::Region"
                 },
                 ".amazonaws.com:/ /var/www/html\n",
+                "WP_CLI=/usr/local/bin/wp\n",
+                "cd /usr/local/bin\n",
+                "/usr/bin/curl -fO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar\n",
+                "if [ -f wp-cli.phar ] ; then\n",
+                "mv -f wp-cli.phar /usr/local/bin/wp\n",
+                "chmod +x /usr/local/bin/wp\n",
+                "fi\n",
                 "tmp_json=`mktemp`\n",
                 "amimoto_json='/opt/local/amimoto.json'\n",
                 "json='{",
-                "\"wordpress\":{\"document_root\":\"/var/www/html\",\"jinkei_cf\": \"true\"},",
-                "\"nginx\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
-                "\"php\" : { \"config\" : { \"user\" : \"ec2-user\" } },",
+                "\"wordpress\":{",
+                "\"document_root\":\"/var/www/html\",",
+                "\"jinkei_cf\": \"true\",",
+                "\"version\": \"",
+                {
+                  "Ref": "WPCoreVersion"
+                },
+                "\"",
+                "},",
+                "\"nginx\" : {",
+                " \"config\" : {",
+                " \"user\" : \"ec2-user\",",
+                " \"wp_multisite\": ",
+                {
+                  "Fn::FindInMap": [
+                    "AMIMOTOConfig",
+                    "wp-multisite",
+                    {
+                      "Ref": "WPIsMultiSite"
+                    }
+                  ]
+                },
+                ",",
+                " \"mobile_detect_enable\": ",
+                {
+                  "Fn::FindInMap": [
+                    "AMIMOTOConfig",
+                    "mobile-detect",
+                    {
+                      "Ref": "IsMobileDetect"
+                    }
+                  ]
+                },
+                ",",
+                " \"client_max_body_size\": \"",
+                {
+                  "Ref": "NginxClientMaxBodySite"
+                },
+                "M\",",
+                " \"phpmyadmin_enable\": ",
+                {
+                  "Fn::FindInMap": [
+                    "AMIMOTOConfig",
+                    "php-myadmin",
+                    {
+                      "Ref": "PHPmyAdmin"
+                    }
+                  ]
+                },
+                "}",
+                "},",
+                "\"php\" : {",
+                " \"config\" : {",
+                " \"user\" : \"ec2-user\",",
+                " \"memory_limit\": \"",
+                {
+                  "Ref": "PHPMemoryLimit"
+                },
+                "M\"",
+                "} ",
+                "},",
                 "\"run_list\" : [ \"recipe[amimoto]\" ]",
                 "}'\n",
                 "[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
@@ -709,13 +752,57 @@
                 "  echo $json > $tmp_json\n",
                 "fi\n",
                 "[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
+                "/bin/sh /opt/local/provision\n",
                 "chown -R ec2-user:nginx /var/www/html\n",
                 "echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
                 "until [ `find /var/www/html -name local-salt.php` ]\n",
                 "do\n",
                 "sleep 5\n",
                 "done\n",
-                "sleep 5\n"
+                "sleep 5\n",
+                "if ! $(/usr/local/bin/wp core is-installed --allow-root); then\n",
+                "/usr/local/bin/wp core install ",
+                "--url=",
+                {
+                  "Ref": "WebSiteDomain"
+                },
+                " ",
+                "--admin_name=",
+                {
+                  "Ref": "WPUserName"
+                },
+                " ",
+                "--admin_email=",
+                {
+                  "Ref": "WPUserEmail"
+                },
+                " ",
+                "--admin_password=",
+                {
+                  "Ref": "WPPassword"
+                },
+                " ",
+                "--path=/var/www/html --allow-root ",
+                " --title='Welcome to the AMIMOTO'",
+                "\n",
+                "fi\n",
+                "wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py\n",
+                "python awslogs-agent-setup.py -n -r ",
+                {
+                  "Ref": "AWS::Region"
+                },
+                " -c /tmp/cwlogs/logs.conf || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
+                "cd /tmp\n",
+                "curl https://amazon-ssm-",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".s3.amazonaws.com/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm\n",
+                "yum install -y amazon-ssm-agent.rpm\n",
+                "sudo service awslogs start || error_exit 'Failed to run CloudWatch Logs agent setup'\n",
+                "chkconfig awslogs on\n",
+                "# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
+                "/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n"
               ]
             ]
           }
@@ -885,6 +972,14 @@
         }
       }
     },
+    "CWLogs": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": {
+          "Ref": "LogRetentionInDays"
+        }
+      }
+    },
     "PublicSubnet": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
@@ -998,19 +1093,6 @@
         ]
       }
     },
-    "EC2WaitHandle": {
-      "Type": "AWS::CloudFormation::WaitConditionHandle"
-    },
-    "EC2WaitCondition": {
-      "Type": "AWS::CloudFormation::WaitCondition",
-      "DependsOn": "EC2",
-      "Properties": {
-        "Handle": {
-          "Ref": "EC2WaitHandle"
-        },
-        "Timeout": "1800"
-      }
-    },
     "SecurityGroupPublic": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -1021,6 +1103,14 @@
             "FromPort": "80",
             "ToPort": "80",
             "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": {
+              "Ref": "SSHLocation"
+            }
           }
         ],
         "Tags": [
@@ -1132,6 +1222,12 @@
             "LoadBalancerPort": "80",
             "Protocol": "HTTP",
             "InstanceProtocol": "HTTP"
+          },
+          {
+            "InstancePort": "22",
+            "LoadBalancerPort": "22",
+            "Protocol": "TCP",
+            "InstanceProtocol": "TCP"
           }
         ],
         "SecurityGroups": [
@@ -1154,7 +1250,8 @@
             {
               "Effect": "Allow",
               "Action": [
-                "cloudfront:*Invalidation*"
+                "cloudfront:*Invalidation*",
+                "cloudfront:*getDistribution*"
               ],
               "Resource": "*"
             }
@@ -1227,11 +1324,55 @@
         }
       }
     },
-    "IAMRoleForStack001": {
+    "IAMPolicyForCWL": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "Description": "CloudWatch Logs",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:Create*",
+                "logs:PutLogEvents",
+                "s3:GetObject"
+              ],
+              "Resource": [
+                "arn:aws:logs:*:*:*",
+                "arn:aws:s3:::*"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "IAMPolicyForSSM": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "Description": "Allow EC2 System Manager",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ssm:*",
+                "ec2messages:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "IAMRoleForInstance": {
       "Type": "AWS::IAM::Role",
       "DependsOn": [
         "IAMPolicyForCloudFront",
-        "IAMPolicyForS3Media"
+        "IAMPolicyForS3Media",
+        "IAMPolicyForSSM",
+        "IAMPolicyForCWL"
       ],
       "Properties": {
         "ManagedPolicyArns": [
@@ -1240,6 +1381,12 @@
           },
           {
             "Ref": "IAMPolicyForS3Media"
+          },
+          {
+            "Ref": "IAMPolicyForSSM"
+          },
+          {
+            "Ref": "IAMPolicyForCWL"
           }
         ],
         "AssumeRolePolicyDocument": {
@@ -1263,7 +1410,7 @@
         "Path": "/",
         "Roles": [
           {
-            "Ref": "IAMRoleForStack001"
+            "Ref": "IAMRoleForInstance"
           }
         ]
       }
@@ -1533,6 +1680,15 @@
     }
   },
   "Outputs": {
+    "ELBDomain": {
+      "Description": "ssh login address",
+      "Value": {
+        "Fn::GetAtt": [
+          "ELB",
+          "DNSName"
+        ]
+      }
+    },
     "WebSiteURL": {
       "Description": "WordPress Site URL (Please wait a few minutes for the installation to complete before accessing.)",
       "Value": {

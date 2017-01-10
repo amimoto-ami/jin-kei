@@ -19,7 +19,7 @@ AWS__CloudFormation__Interface do
             Label do
                 default "WordPress Configuration"
             end
-            Parameters "WebSiteDomain", "WPUserEmail", "WPUserName", "WPPassword"
+            Parameters "WebSiteDomain",  "WPUserName", "WPPassword", "WPUserEmail", "WPCoreVersion", "WPIsMultiSite", "IsMobileDetect"
         },_{
             Label do
                 default "Amazon RDS Configuration"
@@ -27,14 +27,44 @@ AWS__CloudFormation__Interface do
             Parameters "RDSInstanceType", "MySQLPassword", "MulitiAZDatabase", "DBAllocatedStorage"
         },_{
             Label do
-                default "Logs configuration"
+                default "Extra Configuration"
             end
-            Parameters "LogRetentionInDays"
+            Parameters "PHPmyAdmin", "PHPMemoryLimit", "NginxClientMaxBodySite", "LogRetentionInDays"
         }
     ]
     ParameterLabels do
-        VPCID do
-            default "Which VPC should this be deployed to?"
+        LogRetentionInDays do
+            default "Log retention days (optional)"
+        end
+        WebSiteDomain do
+            default "website domain"
+        end
+        WPUserEmail do
+            default "Login Email address"
+        end
+        WPUserName do
+            default "Login user name"
+        end
+        WPPassword do
+            default "Login user password"
+        end
+        WPCoreVersion do
+            default "WordPress version (optional)"
+        end
+        WPIsMultiSite do
+            default "Multisite setting (optional)"
+        end
+        IsMobileDetect do
+            default "is_wp_mobile() support (optional)"
+        end
+        PHPmyAdmin do
+            default "phpMyAdmin setting (optional)"
+        end
+        NginxClientMaxBodySite do
+            default "Nginx client_max_body_size setting (optional)"
+        end
+        PHPMemoryLimit do
+            default "php memory limit setting (optional)"
         end
     end
 end
