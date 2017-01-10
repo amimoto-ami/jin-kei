@@ -329,12 +329,12 @@
     "AutoScalingMinSize": {
       "Description": "Min instance number of AutoScaling group",
       "Type": "Number",
-      "Default": "2"
+      "Default": "1"
     },
     "AutoScalingDesiredCapacity": {
       "Description": "Desired capacity of AutoScaling group",
       "Type": "Number",
-      "Default": "2"
+      "Default": "1"
     },
     "LogRetentionInDays": {
       "Description": "Log retention days on CloudWatch Logs",
