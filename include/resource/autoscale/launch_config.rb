@@ -83,16 +83,43 @@ ASLaunchConfig do
 						"json='{",
 						"\"wordpress\":{",
                             "\"document_root\":\"/var/www/html\",",
-                            "\"jinkei_cf\": \"true\"",
+                            "\"jinkei_cf\": \"true\",",
+                            "\"version\": \"",_{ Ref "WPCoreVersion"}, "\"",
                         "},",
 						"\"nginx\" : {",
                             " \"config\" : {",
-                                " \"user\" : \"ec2-user\"",
+                                " \"user\" : \"ec2-user\",",
+                                " \"wp_multisite\": ",
+                                _{
+                                    Fn__FindInMap [
+                                        "AMIMOTOConfig",
+                                        "wp-multisite",
+                                        _{ Ref "WPIsMultiSite" },
+                                    ]
+                                }, ",",
+                                " \"mobile_detect_enable\": ",
+                                _{
+                                    Fn__FindInMap [
+                                        "AMIMOTOConfig",
+                                        "mobile-detect",
+                                        _{ Ref "IsMobileDetect" },
+                                    ]
+                                }, ",",
+                                " \"client_max_body_size\": \"", _{ Ref "NginxClientMaxBodySite"} , "M\",",
+                                " \"phpmyadmin_enable\": ",
+                                _{
+                                    Fn__FindInMap [
+                                        "AMIMOTOConfig",
+                                        "php-myadmin",
+                                        _{ Ref "PHPmyAdmin" },
+                                    ]
+                                },
                             "}",
                         "},",
 						"\"php\" : {",
                             " \"config\" : {",
-                                " \"user\" : \"ec2-user\"",
+                                " \"user\" : \"ec2-user\",",
+                                " \"memory_limit\": \"", _{ Ref "PHPMemoryLimit" }, "M\"",
                             "} ",
                         "},",
 						"\"run_list\" : [ \"recipe[amimoto]\" ]",
@@ -105,9 +132,9 @@ ASLaunchConfig do
 						"  echo $json > $tmp_json\n",
 						"fi\n",
 						"[ -f $tmp_json ] && /bin/mv -f $tmp_json $amimoto_json\n",
+                        "/bin/sh /opt/local/provision\n",
 
 						## DIRオーナ変更
-						## @TODO:ここでchown実行できているか確認（FTP情報要求された時がある）
 						"chown -R ec2-user:nginx /var/www/html\n",
 						"echo '@reboot /bin/sh /opt/local/provision > /dev/null 2>&1; chown -R ec2-user /var/www/html/' | crontab\n",
 

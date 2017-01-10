@@ -13,6 +13,7 @@ end
 
 Mappings do
   _include "include/mapping/ami_as.rb"
+  _include "include/mapping/amimoto_config.rb"
 end
 
 Parameters do
