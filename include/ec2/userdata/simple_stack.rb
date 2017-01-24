@@ -25,20 +25,16 @@
 			## Set CFN Flag
 			"tmp_json=`mktemp`\n",
 			"amimoto_json='/opt/local/amimoto.json'\n",
-			"json='{",
-			"\"wordpress\":{",
-				"\"jinkei_cf\": \"true\",",
-			"}",
-			"}'\n",
+			"json='{\"wordpress\":{\"jinkei_cf\":\"true\"}}'\n",
 
 			"[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
 			"if [ -f $amimoto_json ]; then\n",
-			"  hash jq || sudo /usr/bin/yum install -y jq\n",
-			"  /usr/bin/jq -s '.[0] * .[1]' $amimoto_json <(echo $json) > $tmp_json\n",
+				"hash jq || sudo /usr/bin/yum install -y jq\n",
+				"/usr/bin/jq -s '.[0] * .[1]' $amimoto_json <(echo $json) > $tmp_json\n",
 			"else\n",
-			"  echo $json > $tmp_json\n",
+				"echo $json > $tmp_json\n",
 			"fi\n",
-
+			"[ -f $tmp_json ] && sudo /bin/mv -f $tmp_json $amimoto_json\n",
 
 			"\n",
 			"until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done", "\n",
