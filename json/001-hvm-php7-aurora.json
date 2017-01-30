@@ -203,12 +203,6 @@
         "AWS::CloudFormation::Init": {
           "config": {
             "files": {
-              "/opt/aws/cf_option.json": {
-                "content": "{\n                \"option\" : {\n                  \"cloudfront\" : \"true\"\n                }\n              }",
-                "mode": "00644",
-                "owner": "root",
-                "group": "root"
-              },
               "/opt/aws/cloud_formation.json": {
                 "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  }\n\t}",
                 "context": {
@@ -275,6 +269,9 @@
               "",
               [
                 "#!/bin/bash\n",
+                "# Get the latest CloudFormation package\n",
+                "yum install -y aws-cfn-bootstrap\n",
+                "# Start cfn-init\n",
                 "/opt/aws/bin/cfn-init -s ",
                 {
                   "Ref": "AWS::StackName"
@@ -284,6 +281,20 @@
                 {
                   "Ref": "AWS::Region"
                 },
+                " || error_exit 'Failed to run cfn-init'\n",
+                "# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
+                "/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n",
+                "tmp_json=`mktemp`\n",
+                "amimoto_json='/opt/local/amimoto.json'\n",
+                "json='{\"wordpress\":{\"jinkei_cf\":\"true\"}}'\n",
+                "[ ! -e /opt/local ] && /bin/mkdir -p /opt/local\n",
+                "if [ -f $amimoto_json ]; then\n",
+                "hash jq || sudo /usr/bin/yum install -y jq\n",
+                "/usr/bin/jq -s '.[0] * .[1]' $amimoto_json <(echo $json) > $tmp_json\n",
+                "else\n",
+                "echo $json > $tmp_json\n",
+                "fi\n",
+                "[ -f $tmp_json ] && sudo /bin/mv -f $tmp_json $amimoto_json\n",
                 "\n",
                 "until find /var/www/vhosts -name wp-config.php  ; do sleep 5 ; done",
                 "\n",
@@ -772,7 +783,8 @@
             {
               "Effect": "Allow",
               "Action": [
-                "cloudfront:*Invalidation*"
+                "cloudfront:*Invalidation*",
+                "cloudfront:*getDistribution*"
               ],
               "Resource": "*"
             }
