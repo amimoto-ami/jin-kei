@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion "2010-09-09"
 Description (<<-EOS).undent
-  WooCommerce Powered by JINKEI (Simple Stack HVM ) Version1.4.0
+  WooCommerce Powered by JINKEI (Simple Stack HHVM ) Version1.4.0
   This is Powerful & Scalable AMIMOTO Stack made by CloudFormation.
   Added RDS, Database change more scalable.
   Use service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).

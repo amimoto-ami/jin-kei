@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "WooCommerce Powered by JINKEI (Simple Stack HVM ) Version1.4.0\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
+  "Description": "WooCommerce Powered by JINKEI (Simple Stack HHVM ) Version1.4.0\nThis is Powerful & Scalable AMIMOTO Stack made by CloudFormation.\nAdded RDS, Database change more scalable.\nUse service is VPC,EC2,EIP,CloudFront,S3,RDS(MariaDB).\n",
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [
