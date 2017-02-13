@@ -42,7 +42,7 @@ _path("/etc/cfn/cfn-hup.conf") do
 stack={{stackArn}}
 region={{region}}'
   mode "000400"
-	owner "root"
+  owner "root"
   group "root"
 	context do
 		stackArn do
@@ -58,7 +58,7 @@ _path("/etc/cfn/hooks.d/cfn-auto-reloader.conf") do
   content '[cfn-auto-reloader-hook]
 triggers=post.update
 path=Resources.{{resources}}.Metadata.AWS::CloudFormation::Init
-action=/opt/aws/bin/cfn-init -s {{stackArn}} -r {{resources}} --region {{region}}
+action=/opt/aws/bin/cfn-init -s {{stackArn}} -r {{resources}} --region {{region}}  --configsets provision
 runas=root'
 	context do
 		stackArn do
@@ -66,15 +66,13 @@ runas=root'
 		end
 		region do
 			Ref "AWS::Region"
+        end
+        if $Stack_Type == 'autoscale' then
+          resources "ASLaunchConfig"
+        else
+          resources "EC2"
+        end
     end
-    resources do
-      if $Stack_Type == 'autoscale' then
-        "ASLaunchConfig"
-      else
-        "EC2"
-      end
-    end
-  end
 end
 
 if $Stack_Type == 'autoscale' then

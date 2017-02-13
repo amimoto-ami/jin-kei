@@ -2,11 +2,26 @@ ASLaunchConfig do
 	Type "AWS::AutoScaling::LaunchConfiguration"
 	Metadata do
 	  AWS__CloudFormation__Init do
-		config do
-		  files do
+        default do
+          files do
   		  _include "include/ec2/metadata-for-rds.rb"
-		  end
-		end
+          end
+        end
+        do_provision do
+          commands do
+            do_provision do
+              command "/opt/local/provision"
+            end
+          end
+        end
+        configSets do
+          provision [
+            "do_provision"
+          ]
+          default [
+            "default"
+          ]
+        end
 	  end
 	end
 	Properties do
