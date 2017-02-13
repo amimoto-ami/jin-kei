@@ -539,7 +539,7 @@
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Metadata": {
         "AWS::CloudFormation::Init": {
-          "config": {
+          "default": {
             "files": {
               "/opt/aws/cloud_formation.json": {
                 "content": "{\n\t  \"rds\" : {\n\t\t\"database\" : \"wordpress\",\n\t\t\"username\" : \"amimoto\",\n\t\t\"password\" : \"{{password}}\",\n\t\t\"endpoint\" : \"{{endpoint}}\",\n\t\t\"port\"     : 3306\n\t  },\n\t  \"s3_conf\": {\n\t\t  \"region\": \"{{s3region}}\",\n\t\t  \"bucket\": \"{{s3bucket}}\",\n\t\t  \"url\": \"{{s3url}}\",\n\t\t  \"storage\": \"STANDARD\"\n\t  }\n\t}",
@@ -586,7 +586,7 @@
                 }
               },
               "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
-                "content": "[cfn-auto-reloader-hook]\ntriggers=post.update\npath=Resources.{{resources}}.Metadata.AWS::CloudFormation::Init\naction=/opt/aws/bin/cfn-init -s {{stackArn}} -r {{resources}} --region {{region}}\nrunas=root",
+                "content": "[cfn-auto-reloader-hook]\ntriggers=post.update\npath=Resources.{{resources}}.Metadata.AWS::CloudFormation::Init\naction=/opt/aws/bin/cfn-init -s {{stackArn}} -r {{resources}} --region {{region}}  --configsets provision\nrunas=root",
                 "context": {
                   "stackArn": {
                     "Ref": "AWS::StackId"
@@ -594,8 +594,7 @@
                   "region": {
                     "Ref": "AWS::Region"
                   },
-                  "resources": {
-                  }
+                  "resources": "ASLaunchConfig"
                 }
               },
               "/tmp/cwlogs/logs.conf": {
@@ -610,6 +609,21 @@
                 "group": "root"
               }
             }
+          },
+          "do_provision": {
+            "commands": {
+              "do_provision": {
+                "command": "/opt/local/provision"
+              }
+            }
+          },
+          "configSets": {
+            "provision": [
+              "do_provision"
+            ],
+            "default": [
+              "default"
+            ]
           }
         }
       },
