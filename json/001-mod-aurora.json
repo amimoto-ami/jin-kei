@@ -950,20 +950,10 @@
             "ForwardedValues": {
               "QueryString": "true",
               "Headers": [
-                "Authorization",
-                "CloudFront-Forwarded-Proto",
-                "CloudFront-Is-Desktop-Viewer",
-                "CloudFront-Is-Mobile-Viewer",
-                "CloudFront-Is-Tablet-Viewer",
-                "Host"
+                "*"
               ],
               "Cookies": {
-                "Forward": "whitelist",
-                "WhitelistedNames": [
-                  "wordpress_*",
-                  "wordpress_logged_in_*",
-                  "wp-postpass_*"
-                ]
+                "Forward": "all"
               }
             },
             "ViewerProtocolPolicy": "allow-all",
@@ -1031,7 +1021,8 @@
                   "CloudFront-Is-Mobile-Viewer",
                   "CloudFront-Is-Tablet-Viewer",
                   "Host",
-                  "User-Agent"
+                  "User-Agent",
+                  "Referer"
                 ],
                 "Cookies": {
                   "Forward": "all"
