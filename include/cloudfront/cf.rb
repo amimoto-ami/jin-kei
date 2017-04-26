@@ -55,31 +55,15 @@ CloudFront do
         ForwardedValues do
           QueryString true
           Headers [
-            "Authorization",
-            "CloudFront-Forwarded-Proto",
-            "CloudFront-Is-Desktop-Viewer",
-            "CloudFront-Is-Mobile-Viewer",
-            "CloudFront-Is-Tablet-Viewer",
-            "Host"
+            "*"
           ]
           Cookies do
-            Forward "whitelist"
-            WhitelistedNames [
-              "wordpress_*",
-              "wordpress_logged_in_*",
-              "wp-postpass_*"
-            ]
+            Forward "all"
           end
         end
         ViewerProtocolPolicy "allow-all"
-		Compress true
+        Compress true
       end
-	  #@TODO:CDN流量計測を考えるとここはONにしたほうがいいかも
-	  #Logging do
-      #    Bucket ""
-      #    Prefix ""
-      #    IncludeCookies false
-	  #end
       ViewerCertificate do
         CloudFrontDefaultCertificate true
         MinimumProtocolVersion "SSLv3"
@@ -97,14 +81,14 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-			  "Authorization",
-			  "CloudFront-Forwarded-Proto",
-			  "CloudFront-Is-Desktop-Viewer",
-			  "CloudFront-Is-Mobile-Viewer",
-			  "CloudFront-Is-Tablet-Viewer",
-			  "Host",
-			  "User-Agent",
-			  "Referer"
+              "Authorization",
+              "CloudFront-Forwarded-Proto",
+              "CloudFront-Is-Desktop-Viewer",
+              "CloudFront-Is-Mobile-Viewer",
+              "CloudFront-Is-Tablet-Viewer",
+              "Host",
+              "User-Agent",
+              "Referer"
             ]
             Cookies do
               Forward "all"
@@ -127,7 +111,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "0"
-		  Compress true
+          Compress true
         },
         _{
           TargetOriginId do
@@ -136,13 +120,14 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-			  "Authorization",
-			  "CloudFront-Forwarded-Proto",
-			  "CloudFront-Is-Desktop-Viewer",
-			  "CloudFront-Is-Mobile-Viewer",
-			  "CloudFront-Is-Tablet-Viewer",
-			  "Host",
-			  "User-Agent"
+              "Authorization",
+              "CloudFront-Forwarded-Proto",
+              "CloudFront-Is-Desktop-Viewer",
+              "CloudFront-Is-Mobile-Viewer",
+              "CloudFront-Is-Tablet-Viewer",
+              "Host",
+              "User-Agent",
+              "Referer"
             ]
             Cookies do
               Forward "all"
@@ -165,7 +150,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "0"
-		  Compress true
+          Compress true
         },
         _{
           TargetOriginId do
@@ -174,8 +159,8 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-			  "Authorization",
-			  "Host"
+              "Authorization",
+              "Host"
             ]
             Cookies do
               Forward "none"
@@ -193,7 +178,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "43200"
-		  Compress true
+          Compress true
         },
         _{
           TargetOriginId do
@@ -202,8 +187,8 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-			  "Authorization",
-			  "Host"
+              "Authorization",
+              "Host"
             ]
             Cookies do
               Forward "none"
@@ -221,7 +206,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "43200"
-		  Compress true
+          Compress true
         },
         _{
           TargetOriginId do
@@ -230,8 +215,8 @@ CloudFront do
           ViewerProtocolPolicy "allow-all"
           ForwardedValues do
             Headers [
-			  "Authorization",
-			  "Host"
+              "Authorization",
+              "Host"
             ]
             Cookies do
               Forward "none"
@@ -249,7 +234,7 @@ CloudFront do
               "GET"
           ]
           MinTTL "43200"
-		  Compress true
+          Compress true
         }
       ]
     end
