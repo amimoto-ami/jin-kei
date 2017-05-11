@@ -9,5 +9,4 @@ kumogata validate 001-hhvm-aurora.rb
 kumogata validate 001-woo-hvm.rb
 kumogata validate 001-woo-hhvm.rb
 kumogata validate 001-woo-mod.rb
-kumogata validate 001-hvm-php7.rb
-kumogata validate 001-hvm-php7-aurora.rb
+kumogata validate as-hvm.rb
