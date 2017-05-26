@@ -15,6 +15,9 @@
 		},
 		"\n",
 
+    ## Update Amazon Linux
+    "yum update -y",
+
 		## Setup NFSv4 for EFS
 		"yum install -y nfs-utils\n",
 		"mount -t nfs4 -o nfsvers=4.1,nosharecache,context $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).",
@@ -33,6 +36,10 @@
 		  "mv -f wp-cli.phar /usr/local/bin/wp\n",
 		  "chmod +x /usr/local/bin/wp\n",
 		"fi\n",
+
+    ## Setup EC2 Systems Manager Agent
+    "cd /tmp",
+    "sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm",
 
 		## Change web document root dir
 		"tmp_json=`mktemp`\n",

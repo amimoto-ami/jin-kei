@@ -5,11 +5,13 @@ IAMRoleForStack001 do
   Type "AWS::IAM::Role"
   DependsOn [
     "IAMPolicyForCloudFront",
+    "IAMPolicyForSSM",
     "IAMPolicyForS3Media"
   ]
   Properties do
     ManagedPolicyArns [
       _{ Ref "IAMPolicyForCloudFront" },
+      _{ Ref "IAMPolicyForSSM" },
       _{ Ref "IAMPolicyForS3Media" }
     ]
     AssumeRolePolicyDocument do
