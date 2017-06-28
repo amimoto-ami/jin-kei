@@ -109,9 +109,6 @@
   },
   "Mappings": {
     "MPAmimotov4": {
-      "eu-central-1": {
-        "AMI": "ami-841cc0eb"
-      },
       "us-east-1": {
         "AMI": "ami-27244131"
       },
