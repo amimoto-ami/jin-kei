@@ -287,6 +287,8 @@
                 " || error_exit 'Failed to run cfn-init'\n",
                 "# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
                 "/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n",
+                "cd /tmp",
+                "sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm",
                 "tmp_json=`mktemp`\n",
                 "amimoto_json='/opt/local/amimoto.json'\n",
                 "json='{\"wordpress\":{\"jinkei_cf\":\"true\"}}'\n",
@@ -864,12 +866,16 @@
       "Type": "AWS::IAM::Role",
       "DependsOn": [
         "IAMPolicyForCloudFront",
+        "IAMPolicyForSSM",
         "IAMPolicyForS3Media"
       ],
       "Properties": {
         "ManagedPolicyArns": [
           {
             "Ref": "IAMPolicyForCloudFront"
+          },
+          {
+            "Ref": "IAMPolicyForSSM"
           },
           {
             "Ref": "IAMPolicyForS3Media"
