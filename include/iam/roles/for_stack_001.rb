@@ -1,5 +1,6 @@
 _include "include/iam/policies/allow-invalidation.rb"
 _include "include/iam/policies/s3-bucket.rb"
+_include "include/iam/policies/ssm.rb"
 
 IAMRoleForStack001 do
   Type "AWS::IAM::Role"
