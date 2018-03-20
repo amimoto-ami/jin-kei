@@ -23,6 +23,7 @@ RDS do
       Ref "DBSubnetGroup"
     end
     Engine "MariaDB"
+    StorageType "gp2"
     MasterUsername "amimoto"
     MasterUserPassword do
       Ref "MySQLPassword"
