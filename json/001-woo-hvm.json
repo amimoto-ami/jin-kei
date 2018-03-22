@@ -287,9 +287,9 @@
               }
             }
           },
-          "do_provision": {
+          "do:provision": {
             "commands": {
-              "do_provision": {
+              "do:provision": {
                 "command": "/opt/local/provision"
               }
             }
