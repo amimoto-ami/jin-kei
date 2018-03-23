@@ -114,7 +114,7 @@
     "InstanceType": {
       "Description": "EC2 instance type",
       "Type": "String",
-      "Default": "c3.large",
+      "Default": "c4.large",
       "AllowedValues": [
         "t2.micro",
         "t2.small",
@@ -287,9 +287,9 @@
               }
             }
           },
-          "do_provision": {
+          "do:provision": {
             "commands": {
-              "do_provision": {
+              "do:provision": {
                 "command": "/opt/local/provision"
               }
             }

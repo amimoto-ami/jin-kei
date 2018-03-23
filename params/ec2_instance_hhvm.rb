@@ -1,8 +1,9 @@
 InstanceType do
   Description "EC2 instance type"
   Type "String"
-  Default "c3.large"
-  AllowedValues "m3.medium",
+  Default "c4.large"
+  AllowedValues "t2.large",
+        "m3.medium",
 				"m3.large",
 				"m3.xlarge",
 				"m3.2xlarge",
