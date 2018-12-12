@@ -37,10 +37,6 @@
 		  "chmod +x /usr/local/bin/wp\n",
 		"fi\n",
 
-    ## Setup EC2 Systems Manager Agent
-    "cd /tmp",
-    "sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm",
-
 		## Change web document root dir
 		"tmp_json=`mktemp`\n",
 		"amimoto_json='/opt/local/amimoto.json'\n",
