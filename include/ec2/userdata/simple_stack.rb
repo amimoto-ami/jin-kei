@@ -22,10 +22,6 @@
 			"# Start up the cfn-hup daemon to listen for changes to the EC2 instance metadata\n",
 			"/opt/aws/bin/cfn-hup || error_exit 'Failed to start cfn-hup'\n",
 
-      ## Setup EC2 Systems Manager Agent
-      "cd /tmp",
-      "sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm",
-
 			## Set CFN Flag
 			"tmp_json=`mktemp`\n",
 			"amimoto_json='/opt/local/amimoto.json'\n",
