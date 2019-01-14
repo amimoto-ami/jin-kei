@@ -4,9 +4,6 @@
 	  [
 			"#!/bin/bash\n",
 
-			"# Get the latest CloudFormation package\n",
-			"yum install -y aws-cfn-bootstrap\n",
-
 			"# Start cfn-init\n",
 			"/opt/aws/bin/cfn-init -s ",
 			_{
