@@ -73,3 +73,13 @@ $ kumogata create \
  - AWS::EC2::VPCGatewayAttachment
  - AWS::EC2::Route
  - AWS::EC2::VPC
+
+## AMI IDs
+
+```
+$ bundle exec rake ami:map['AMIMOTO HVM 5*','hvm']
+$ bundle exec rake ami:map['AMIMOTO*for AutoScaling*','as']
+$ bundle exec rake ami:map['AMIMOTO MOD_PHP *','mod']
+$ bundle exec rake ami:map['*Woo*HVM*','woo_hvm']
+$ bundle exec rake ami:map['*Woo*MOD*','woo_mod']
+```
