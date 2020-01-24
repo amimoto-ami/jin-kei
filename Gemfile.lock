@@ -584,7 +584,7 @@ GEM
       ref
     tins (1.16.3)
     uuidtools (2.1.5)
-    yard (0.9.12)
+    yard (0.9.24)
 
 PLATFORMS
   ruby
