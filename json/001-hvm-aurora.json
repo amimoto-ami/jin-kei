@@ -20,7 +20,8 @@
           "Parameters": [
             "InstanceType",
             "KeyName",
-            "SSHLocation"
+            "SSHLocation",
+            "EC2HTTPLocation"
           ]
         },
         {
@@ -81,7 +82,7 @@
         "AMI": "ami-0045f4bc81be2f366"
       },
       "us-east-1": {
-        "AMI": "ami-08ade0705b256fd98"
+        "AMI": "ami-082ce0174512fd817"
       },
       "us-east-2": {
         "AMI": "ami-059b263c628bd4024"
@@ -116,6 +117,15 @@
       "Type": "String",
       "MinLength": "9",
       "MaxLength": "18",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "Must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "EC2HTTPLocation": {
+      "Description": "The IP address range that can be used to HTTP to the EC2 instances.",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription": "Must be a valid IP CIDR range of the form x.x.x.x/x."
     },
@@ -702,6 +712,14 @@
             "ToPort": "22",
             "CidrIp": {
               "Ref": "SSHLocation"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": {
+              "Ref": "EC2HTTPLocation"
             }
           }
         ],
