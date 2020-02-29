@@ -574,7 +574,7 @@ GEM
     pry-doc (0.11.1)
       pry (~> 0.9)
       yard (~> 0.9)
-    rake (12.3.0)
+    rake (12.3.3)
     ref (2.0.0)
     retryable (2.0.4)
     term-ansicolor (1.6.0)
