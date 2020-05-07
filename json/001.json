@@ -179,12 +179,6 @@
         "r5.12xlarge",
         "r5.16xlarge",
         "r5.24xlarge",
-        "t3a.micro",
-        "t3a.small",
-        "t3a.medium",
-        "t3a.large",
-        "t3a.xlarge",
-        "t3a.2xlarge"
       ],
       "ConstraintDescription": "Must be a valid EC2 instance type."
     },
