@@ -178,7 +178,7 @@
         "r5.8xlarge",
         "r5.12xlarge",
         "r5.16xlarge",
-        "r5.24xlarge",
+        "r5.24xlarge"
       ],
       "ConstraintDescription": "Must be a valid EC2 instance type."
     },
