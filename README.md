@@ -1,3 +1,8 @@
+# New version available!
+
+Go to the new repo :)
+https://github.com/amimoto-ami/amimoto-cfn-jinkei
+
 #WordPress powered by JINKEI
 CloudFormation templates to create WordPress stack using AMIMOTO-AMI.
 
