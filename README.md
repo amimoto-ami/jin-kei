@@ -3,21 +3,21 @@
 Go to the new repo :)
 https://github.com/amimoto-ami/amimoto-cfn-jinkei
 
-#WordPress powered by JINKEI
+# WordPress powered by JINKEI
 CloudFormation templates to create WordPress stack using AMIMOTO-AMI.
 
-##Getting Start
+## Getting Start
 You can use 2way.
 
 + Using on AWS Market Place
 + Using kumogata
 
-##Using on AWS Market Place
+## Using on AWS Market Place
 Search "AMIMOTO" on AWS Market Place.  
 More information -> https://speakerdeck.com/amimoto/how-to-use-jin-kei-aws-cloudformation-template  
 Japanese -> https://speakerdeck.com/amimoto/ri-ben-yu-jin-kei-aws-cloudformation-tenpuretofalseshi-ifang
 
-##Using kumogata( How to contribute )
+## Using kumogata( How to contribute )
 Clone this repository.
 ```
 $ git@github.com:megumiteam/amimoto-enterprise-cfn.git
@@ -52,20 +52,20 @@ $ kumogata create \
   --capabilities=CAPABILITY_IAM
 ```
 
-##Stack Information
-###ID:001 "Simple Stack"
-####Architecture
+## Stack Information
+### ID:001 "Simple Stack"
+#### Architecture
 ![](./img/stack001.png)
 
-####Template List
+#### Template List
 [See Stack Type Wiki](https://github.com/amimoto-ami/amimoto-enterprise-cfn/wiki/Stack-Type)
 
 
-##Relase Note
-###Version1.2.1
+## Relase Note
+### Version1.2.1
 - Auto Set-up nephila clavata Plugin
 
-###Version1.0.1
+### Version1.0.1
 - Update SecurityGroupIngress Setting
 - Add Depends on "AttachGatewayToVPC"
  - AWS::ElasticLoadBalancing::LoadBalancer
